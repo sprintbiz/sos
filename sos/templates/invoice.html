@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content-title %}Invoice List aaaa{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="app-heading">
+    <div class="app-title">
+      <div class="title">{{title}}<span class="highlight"></span></div>
+      <div class="description"></div>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="card">
+      <div class="card-header">
+        {{title}}
+      </div>
+      <div class="card-body no-padding">
+        <table class="datatable table table-striped primary" cellspacing="0" width="100%">
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Invoice NBR</th>
+          <th>Hours</th>
+          <th>Service</th>
+          <th>Created On</th>
+          <th>Status</th>
+      </tr>
+  </thead>
+
+  <tbody>
+    {% for field in invoices %}
+      <tr>
+          <td>{{ field.invoice_id}}</td>
+          <td><a href="{% url 'invoice-edit' field.invoice_id %}" >{{ field.invoice__name}}</a></td>
+          <td>{{ field.hour}}</td>
+          <td>{{ field.service__name}}</td>
+          <td>{{ field.invoice__create_date}}</td>
+          <td>{{ field.invoice__status__name}}</td>
+      </tr>
+  {% endfor %}
+  </tbody>
+  </div>
+  </div>
+  </div>
+</div>
+
+{% endblock %}

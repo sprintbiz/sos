@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>SprintBIZ</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='{% static 'css/style.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/flat-admin.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/theme/blue-sky.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/theme/blue.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/theme/red.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/theme/yellow.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/jquery-ui.css' %}'>
+	<link rel="stylesheet" type="text/css" href='{% static 'css/fullcalendar.min.css' %}'>
+
+
+	<script type="text/javascript" src='{% static 'js/respond.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/moment.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/jquery.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/bootstrap.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/datatables.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/jquery.formset.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/jquery-ui.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/select2.full.js' %}'></script>
+	<script type="text/javascript" src='{% static 'js/fullcalendar.min.js' %}'></script>
+</head>
+<body>
+	<div class="app app-default">
+	<aside class="app-sidebar" id="sidebar">
+		<div class="sidebar-header">
+			<a class="sidebar-brand" href="#"><span class="highlight">Smart</span> Office</a>
+			<button type="button" class="sidebar-toggle">
+				<i class="fa fa-times"></i>
+			</button>
+		</div>
+		<div class="sidebar-menu">
+			<ul class="sidebar-nav">
+				<li class="">
+					<a href="/dashboard/">
+						<div class="icon">
+							<i class="fa fa-tasks" aria-hidden="true"></i>
+						</div>
+						<div class="title">Dashboard</div>
+					</a>
+				</li>
+				<li class="">
+					<a href="/calendar/">
+						<div class="icon">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						</div>
+						<div class="title">Timescheet</div>
+					</a>
+				</li>
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<div class="icon">
+						<i class="fa fa-file-o" aria-hidden="true"></i>
+					</div>
+					<div class="title">Invoice</div>
+				</a>
+				<div class="dropdown-menu">
+					<ul>
+						<li><a href="/invoice/">Invoice List</a></li>
+						<li><a href="/invoice/new/">Create Invoice</a></li>
+					</ul>
+				</div>
+			</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="app-container">
+		<nav class="navbar navbar-default" id="navbar">
+		  <div class="container-fluid">
+			<div class="navbar-collapse collapse in">
+			  <ul class="nav navbar-nav navbar-mobile">
+				<li>
+				  <button type="button" class="sidebar-toggle">
+					<i class="fa fa-bars"></i>
+				  </button>
+				</li>
+				<li class="logo">
+				  <a class="navbar-brand" href="#"><span class="highlight">Flat v3</span> Admin</a>
+				</li>
+				<li>
+				  <button type="button" class="navbar-toggle">
+
+				  </button>
+				</li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-left">
+				<li class="navbar-title">Search</li>
+				<li class="navbar-search hidden-sm">
+				  <input id="search" type="text" placeholder="Search..">
+				  <button class="btn-search"><i class="fa fa-search"></i></button>
+				</li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+{% block content %}{% endblock %}
+	</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="app-heading">
+    <div class="app-title">
+      <div class="title">{{title}}<span class="highlight"></span></div>
+      <div class="description"></div>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+    <div class="card-header">{{title}}
+    </div>
+      <div class="card-body">
+        <div class="row">
+					<div class="col-md-6">
+					<form method="post" action="{{ action_url }}">
+			    {% csrf_token %}
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.name.label }}</label>
+						<div class="col-md-9">
+							{{ invoice.name }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.status.label }}</label>
+						<div class="col-md-9">
+							{{ invoice.status }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.company.label }}</label>
+						<div class="col-md-9">
+							{{ invoice.company }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.client.label }}</label>
+						<div class="col-md-9">
+							{{ invoice.client }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.create_date.label }}</label>
+						<div class="col-md-9">
+							<div class="input-group">
+								<span class="input-group-addon" id="basic-addon1">
+									<i class="fa fa-calendar" aria-hidden="true"></i></span>
+								{{ invoice.create_date }}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">{{ invoice.payment_date.label }}</label>
+						<div class="col-md-9">
+							<div class="input-group">
+								<span class="input-group-addon" id="basic-addon1">
+									<i class="fa fa-calendar" aria-hidden="true"></i></span>
+								{{ invoice.payment_date }}
+							</div>
+						</div>
+					</div>
+
+
+          <label>{{ invoice.literal_value.label }}</label>
+			    {{ invoice.literal_value }}
+			{% load formset_tags %}
+
+					<div id="formset" data-formset-prefix="{{ formset.prefix }}">
+					    {{ formset.management_form }}
+
+					    <div data-formset-body>
+					        <!-- New forms will be inserted in here -->
+					        {% for form in formset %}
+					            <div data-formset-form>
+					                {{ form.id }}
+					                {{ form.service }}
+					                {{ form.hour }}
+					                <div class="hidden">{{ form.DELETE }}</div>
+					                <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+					            </div>
+					        {% endfor %}
+					    </div>
+
+					    <!-- The empty form template. By wrapping this in a <script> tag, the
+					    __prefix__ placeholder can easily be replaced in both attributes and
+					    any scripts -->
+					    <script type="form-template" data-formset-empty-form>
+					        {% escapescript %}
+					            <div data-formset-form>
+					                {{ formset.empty_form }}
+					                <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+					            </div>
+					        {% endescapescript %}
+					    </script>
+
+					    <!-- This button will add a new form when clicked -->
+					    <div class="btn-group">
+					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
+					        <input type="submit" value="Update invoice" class="btn btn-default"/>
+					        <a class="btn btn-default" href="{{ print_url }}">Print</a>
+					    </div>
+
+					    <script>jQuery(function($) {
+					        $("#formset").formset({
+					            animateForms: true
+					        });
+									$( ".datepicker" ).datepicker({
+										beforeShowDay: $.datepicker.noWeekends
+									});
+					    });</script>
+
+					</div>
+				</form>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

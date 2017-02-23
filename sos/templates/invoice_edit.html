@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content-title %}{% endblock %}
+{% block content %}
+		<div class="col-sm-9">
+			<h4><small>NEW INVOICE</small></h4>
+			<hr>
+			<h2>New Invoice</h2>
+			<hr>
+
+			<form action="{{ invoice_edit_url }}" method="post">
+
+			{% csrf_token %}
+			{% for invoice_field in invoice %}
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">{{ invoice_field.label }}</label>
+				<div class="col-sm-3">
+				{{ invoice_field }}
+				</div>
+			</div>
+			{% endfor %}
+			{{ formset.management_form }}
+			{% for form in formset %}
+				{{ form.id }}
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">service</label>
+				<div class="col-sm-3">
+				{{ form.service }}
+				</div>
+				<label class="col-sm-1 col-form-label">hour</label>
+				<div class="col-sm-3">
+				{{ form.hour }}
+				</div>
+			</div>
+			{% endfor %}
+				<div class="form-group">
+					<input type="submit" value="Submit" class="btn btn-primary"/>
+				</div>
+			</form>
+		</div>
+{% endblock %}

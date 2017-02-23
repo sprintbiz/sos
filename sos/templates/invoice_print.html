@@ -1,0 +1,111 @@
+{% extends "print.html" %}
+{% block content-title %}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h2>Faktura</h2>
+                <h3 class="pull-right"> # {{ invoice_object.name}}</h3>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-6">
+                    <address>
+                        <strong>Sprzedawca:</strong><br>
+                        {{ invoice_object.company.name}}<br>
+                        {{ invoice_object.company.street_name}} {{ invoice_object.company.street_number}},
+                        {{ invoice_object.company.zip_code}} {{ invoice_object.company.city}}<br>
+                        NIP {{ invoice_object.company.code}}
+                    </address>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <address>
+                        <strong>Odbiorca:</strong><br>
+                        {{ invoice_object.client.name}}<br>
+                        {{ invoice_object.client.street_name}} {{ invoice_object.client.street_number}},
+                        {{ invoice_object.client.zip_code}} {{ invoice_object.client.city}} <br>
+                        NIP {{ invoice_object.client.code}}
+                    </address>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <address>
+                        <strong>Metoda Płatnosci:</strong><br>
+                        ACARD Paweł Sawukajtys<br>
+                        T-Mobile Usługi Bankowe<br>
+                        SWIFT : ALBP PL PW<br>
+                        71249010440000420076462397
+                    </address>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <address>
+                        <strong>Data sprzedaży:</strong><br>
+                        {{ invoice_object.create_date|date:"SHORT_DATE_FORMAT" }}<br><br>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <td><strong>Usługa</strong></td>
+                                <td class="text-center"><strong>Cena jednostki</strong></td>
+                                <td class="text-center"><strong>Iość godzin</strong></td>
+                                <td class="text-center"><strong>Kwota netto</strong></td>
+                                <td class="text-center"><strong>Vat %</strong></td>
+                                <td class="text-right"><strong>Kwota Vat</strong></td>
+                                <td class="text-right"><strong>Kwota brutto</strong></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                            {% for invoice_detail_field in invoice_detail_object %}
+                            <tr>
+                                <td>{{ invoice_detail_field.service_name}}</td>
+                                <td class="text-center">{{ invoice_detail_field.price_per_hour|floatformat:2}}</td>
+                                <td class="text-center">{{ invoice_detail_field.hour}}</td>
+                                <td class="text-center">{{ invoice_detail_field.value|floatformat:2}}</td>
+                                <td class="text-center">{{ invoice_detail_field.tax_prct}}</td>
+                                <td class="text-right">{{ invoice_detail_field.tax_value|floatformat:2}}</td>
+                                <td class="text-right">{{ invoice_detail_field.gross_value|floatformat:2}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+
+                                <td colspan="1" class="no-line text-right"><strong>Suma Vat</strong></td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total.total_tax|floatformat:2}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="no-line text-right"><strong>Suma Netto</strong></td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total.total_net|floatformat:2}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="no-line text-right"><strong>Do Zapłaty</strong></td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total.total_gross|floatformat:2}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="no-line text-right"><strong>Słownie</strong></td>
+                                <td colspan="6" class="no-line text-left">{{invoice_object.literal_value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

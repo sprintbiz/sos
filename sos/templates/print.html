@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>SprintBIZ</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" media="print">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	{{ formset.media }}
+	<style>
+		@page {size: A4;}
+
+		.invoice-title h2, .invoice-title h3 {
+			display: inline-block;
+		}
+
+		.table > tbody > tr > .no-line {
+			border-top: none;
+		}
+
+		.table > thead > tr > .no-line {
+			border-bottom: none;
+		}
+
+		.table > tbody > tr > .thick-line {
+			border-top: 2px solid;
+		}
+
+	</style>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row content">
+
+		{% block content %}{% endblock %}
+	</div>
+</div>
+</body>
+</html>

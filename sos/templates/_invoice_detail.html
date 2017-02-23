@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content-title %}{% endblock %}
+{% block content %}
+
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4><small class="text-uppercase">Sprzedawca</small> <a href="#">{{ invoice_object.company.name}}</a></h4>
+            </div>
+            <div class="panel-body text-uppercase">
+              <p>
+                {{ invoice_object.company.street_name}} {{ invoice_object.company.street_number}}<br>
+                {{ invoice_object.company.postal_code}} {{ invoice_object.company.city}} <br>
+                NIP {{ invoice_object.company.code}} <br>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-5 col-xs-offset-2 text-right">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4><small class="text-uppercase">Nabywca</small> <a href="#">{{ invoice_object.client.name}}</a></h4>
+            </div>
+            <div class="panel-body text-uppercase">
+              <p>
+                {{ invoice_object.client.street_name}} {{ invoice_object.client.street_number}}<br>
+                {{ invoice_object.client.postal_code}} {{ invoice_object.client.city}} <br>
+                NIP {{ invoice_object.client.code}} <br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / end client details section -->
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>
+              <h5 class="text-uppercase">Usługa</h5>
+            </th>
+            <th>
+              <h5 class="text-uppercase">Ilość</h5>
+            </th>
+            <th>
+              <h5 class="text-uppercase">Cena j.m. (zł)</h5>
+            </th>
+            <th>
+              <h5 class="text-uppercase">netto (zł)</h5>
+            </th>
+            <th>
+              <h5 class="text-uppercase">Vat (zł)</h5>
+            </th>
+            <th>
+              <h5 class="text-uppercase">brutto (zł)</h5>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+		{% for invoice_detail_field in invoice_detail_object %}
+          <tr>
+            <td>{{ invoice_detail_field.service_name}}</td>
+            <td class="text-right">{{invoice_detail_field.hour}}</td>
+            <td class="text-right">{{ invoice_detail_field.price_per_hour|floatformat:2}}</td>
+            <td class="text-right">{{ invoice_detail_field.value|floatformat:2}}</td>
+			<td class="text-right">{{ invoice_detail_field.tax_value|floatformat:2}}</td>
+			<td class="text-right">{{ invoice_detail_field.gross_value|floatformat:2}}</td>
+          </tr>
+		{% endfor %}
+
+        </tbody>
+      </table>
+    <div class="row text-right">
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h4 class="text-uppercase">Dane do płatności</h4>
+            </div>
+            <div class="panel-body">
+              <p>ACARD Paweł Sawukajtys</p>
+              <p>T-Mobile Usługi Bankowe</p>
+              <p>SWIFT : ALBP PL PW</p>
+              <p>Numer Rachunku : 71249010440000420076462397</p>
+              <p>IBAN : PL 71 2490 1044 0000 4200 7646 2397</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+			<div class="span6">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h4 class="text-uppercase">Wartość faktury</h4>
+					</div>
+					<div class="panel-body">
+
+						<div class="row">
+						  <div class="col-xs-6 col-sm-3"><h4>Vat</h4></div>
+						  <div class="col-xs-6 col-sm-3 text-right"><h4>{{invoice_total.total_tax|floatformat:2}}</h4></div>
+						</div>
+						<div class="row">
+						  <div class="col-xs-6 col-sm-3"><h4>Netto</h4></div>
+						  <div class="col-xs-6 col-sm-3 text-right"><h4>{{invoice_total.total_net|floatformat:2}}</h4></div>
+						</div>
+
+					<h3>
+						<div class="row">
+						  <div class="col-xs-6 col-sm-3">Do zaplaty</div>
+						  <div class="col-xs-6 col-sm-3 text-right">{{invoice_total.total_gross|floatformat:2}}</div>
+						</div>
+					</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
