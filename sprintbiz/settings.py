@@ -57,7 +57,7 @@ ROOT_URLCONF = 'sprintbiz.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ BASE_DIR + '/templates/', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'sprintbiz.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'database',
+        'NAME': 'dsbsos',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'oracle',
     }
 }
 

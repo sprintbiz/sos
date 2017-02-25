@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
+from sos.views import TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -32,12 +32,17 @@ urlpatterns = [
     url(r'^calendar/$', TimescheetView.as_view()),
     url(r'^event/$', EventList.as_view() , name='event_list'),
     url(r'^event/add/$', EventCreate.as_view()),
-    url(r'^event/edit/$', EventEdit.as_view()),
+    url(r'^event/edit/(?P<id>\w+)/$', EventEdit.as_view()),
     url(r'^calendar/json/event/$', CalendarResponce.as_view()),
     url(r'^json/daysnotfilled/$', JsonDaysNotFilled.as_view()),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^tax/$', TaxList.as_view(), name='tax-list'),
+    url(r'^tax/create/$', TaxCreate.as_view(), name='tax-create'),
+    url(r'^tax/edit/(?P<pk>\w+)/$', TaxEdit.as_view(), name='tax-edit'),
+    url(r'^tax/delete/(?P<pk>\w+)/$', TaxDelete.as_view(), name='tax-delete'),
+    url(r'^tax/detail/(?P<pk>\w+)/$', TaxDetail.as_view(), name='tax-detail'),
     url(r'^.*$', RedirectView.as_view(), name='home'),
 ]
