@@ -5,7 +5,7 @@
 				<li {% if request.get_full_path == "/dashboard/" %}class="active"{% endif %}><a href="/dashboard/">Dashboard</a></li>
         <li {% if request.get_full_path == "/invoice/" %}class="active"{% endif %}><a href="/invoice/">Invoice list</a></li>
         <li {% if request.get_full_path == "/invoice/new/" %}class="active"{% endif %}><a href="/invoice/new/">New invoice</a></li>
-				<li {% if request.get_full_path == "/calendar/" %}class="active"{% endif %}><a href="/calendar/">Timescheet</a></li>
+				<li {% if request.get_full_path == "/event/" %}class="active"{% endif %}><a href="/calendar/">Events</a></li>
       </ul><br>
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Search ...">

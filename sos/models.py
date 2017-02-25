@@ -19,7 +19,7 @@ class Status(models.Model):
 
 class Tax (models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, blank=False)
     value = models.DecimalField(max_digits=5, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -30,6 +30,9 @@ class Tax (models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('tax-edit', kwargs={'pk': self.id})
 
 class Company (models.Model):
     id = models.AutoField(primary_key=True)

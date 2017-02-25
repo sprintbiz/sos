@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Invoice,Invoice_Details, Status, Company, Client, Service, Event, Project
+from sos.models import Invoice,Invoice_Details, Status, Company, Client, Service, Event, Project, Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 
@@ -36,3 +36,21 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['id','name', 'hour','start_date','end_date','type_code','project']
+
+class EventForm(forms.ModelForm):
+    project = forms.ModelChoiceField(required =False, label='Project', queryset = Project.objects.all(), widget=forms.Select(attrs={'style':'width: 100%','class':'project-select', 'id':'project-select'}))
+    name = forms.CharField(required =False, label='Description', widget= forms.Textarea(attrs={'class': 'form-control','id':'event-name', }))
+    hour = forms.CharField(required =False, label='Hour', widget= forms.TextInput(attrs={'class': 'form-control','id':'event-hour',}))
+    start_date = forms.DateField(required =False, label='Start Date', widget=forms.DateInput(attrs={'class': 'form-control datepicker', 'id':'event-start-date', }))
+    end_date = forms.DateField(required =False, label='End Date', widget=forms.DateInput(attrs={'class': 'form-control datepicker', 'id':'event-end-date',}))
+    type_code = forms.CharField(required =False, label='Event Type', initial='TS', widget= forms.TextInput(attrs={'readonly' : 'True','class': 'form-control','id':'event-type'}))
+    class Meta:
+        model = Event
+        fields = ['id','name', 'hour','start_date','end_date','type_code','project']
+
+class TaxForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'tax-name', }))
+    value = forms.CharField(required =True, label='Value', widget= forms.TextInput(attrs={'class': 'form-control','id':'tax-value', }))
+    class Meta:
+        model = Tax
+        fields = ['name','value']

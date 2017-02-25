@@ -1,10 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import InvoiceForm, InvoiceDetailForm, EventForm
-from sos.models import Invoice,Invoice_Details, Event, Project
+from sos.forms import InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
+from sos.models import Invoice,Invoice_Details, Event, Project, Tax
 from django.forms import extras, inlineformset_factory
-from django.views.generic.edit import FormView
 from django.forms import modelformset_factory
 import cStringIO as StringIO
 from django.template.loader import get_template
@@ -13,11 +12,18 @@ from cgi import escape
 from django.db.models import F,ExpressionWrapper,FloatField, Sum, Value as V, TextField
 from django.db.models.functions import Coalesce, Concat
 from django.contrib.auth import authenticate
+from django.contrib.messages.views import SuccessMessageMixin
 import json
 from django.http import JsonResponse
+from django.core.urlresolvers import reverse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.contrib import messages
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+import datetime
+from django.utils import timezone
+
 
 class RedirectView(View):
     def get(self, request):
@@ -288,6 +294,44 @@ class EventCreate(View):
             new_event = event_form.save(commit=False)
             new_event.save()
             messages.success(request, 'Added new event ' + request.POST.get('name',''))
-
-
         return HttpResponseRedirect(action_url)
+
+class TaxList(ListView):
+    title = 'Tax List'
+    template_name = 'tax_list.html'
+    model = Tax
+    form_class = TaxForm
+
+class TaxCreate(SuccessMessageMixin, CreateView):
+    title = 'Tax Create'
+    template_name = 'tax_create.html'
+    model = Tax
+    form_class = TaxForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('tax-list')
+
+class TaxEdit(UpdateView):
+    title = 'Tax Edit'
+    template_name = 'tax_edit.html'
+    model = Tax
+    form_class = TaxForm
+
+class TaxDelete(DeleteView):
+    title = 'Tax Delete'
+    template_name = 'tax_confirm_delete.html'
+    model = Tax
+    success_url = reverse_lazy('tax-list')
+    success_message = "Tax was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(TaxDelete, self).delete(request, *args, **kwargs)
+
+class TaxDetail(DetailView):
+    title = 'Tax Detail'
+    template_name = 'tax_detail.html'
+    model = Tax
+    def get_context_data(self, **kwargs):
+        context = super(TaxDetail, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
