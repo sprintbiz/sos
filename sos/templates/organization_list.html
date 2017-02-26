@@ -50,29 +50,29 @@
                 </thead>
                 <tbody>
             	  {% if object_list %}
-            	   {% for customer in object_list %}
+            	   {% for organization in object_list %}
                   <tr>
-                    <th scope="row"><a href="{% url 'customer-edit' customer.id %}">{{ customer.name }}</a></th>
-                    <td>{{ customer.street_name }}</td>
-                    <td>{{ customer.street_number }}</td>
-                    <td>{{ customer.zip_code }}</td>
-                    <td>{{ customer.city }}</td>
-                    <td>{{ customer.country }}</td>
-                    <td>{{ customer.phone }}</td>
-                    <td>{{ customer.email }}</td>
-                    <td>{{ customer.code }}</td>
-          		      <td><a href="{% url 'customer-delete' customer.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                    <td><a href="{% url 'customer-detail' customer.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
+                    <th scope="row"><a href="{% url 'organization-edit' organization.id %}">{{ organization.name }}</a></th>
+                    <td>{{ organization.street_name }}</td>
+                    <td>{{ organization.street_number }}</td>
+                    <td>{{ organization.zip_code }}</td>
+                    <td>{{ organization.city }}</td>
+                    <td>{{ organization.country }}</td>
+                    <td>{{ organization.phone }}</td>
+                    <td>{{ organization.email }}</td>
+                    <td>{{ organization.code }}</td>
+          		      <td><a href="{% url 'organization-delete' organization.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td><a href="{% url 'organization-detail' organization.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
                   </tr>
           		 {% endfor %}
           		{% else %}
                 <tr>
-                  <td colspan="11">There are no customers definied.</td>
+                  <td colspan="11">There are no organizations definied.</td>
                 </tr>
               {% endif %}
               </tbody>
           	</table>
-          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'customer-create' %}'">Create New</button>
+          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'organization-create' %}'">Create New</button>
           </div>
         </div>
       </div>

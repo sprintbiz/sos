@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import CustomerDetail, CustomerEdit, CustomerDelete, CustomerCreate, CustomerList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
+from sos.views import OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -44,10 +44,10 @@ urlpatterns = [
     url(r'^tax/edit/(?P<pk>\w+)/$', TaxEdit.as_view(), name='tax-edit'),
     url(r'^tax/delete/(?P<pk>\w+)/$', TaxDelete.as_view(), name='tax-delete'),
     url(r'^tax/detail/(?P<pk>\w+)/$', TaxDetail.as_view(), name='tax-detail'),
-    url(r'^customer/$', CustomerList.as_view(), name='customer-list'),
-    url(r'^customer/create/$', CustomerCreate.as_view(), name='customer-create'),
-    url(r'^customer/edit/(?P<pk>\w+)/$', CustomerEdit.as_view(), name='customer-edit'),
-    url(r'^customer/delete/(?P<pk>\w+)/$', CustomerDelete.as_view(), name='customer-delete'),
-    url(r'^customer/detail/(?P<pk>\w+)/$', CustomerDetail.as_view(), name='customer-detail'),
+    url(r'^organization/$', OrganizationList.as_view(), name='organization-list'),
+    url(r'^organization/create/$', OrganizationCreate.as_view(), name='organization-create'),
+    url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),
+    url(r'^organization/delete/(?P<pk>\w+)/$', OrganizationDelete.as_view(), name='organization-delete'),
+    url(r'^organization/detail/(?P<pk>\w+)/$', OrganizationDetail.as_view(), name='organization-detail'),
     url(r'^.*$', RedirectView.as_view(), name='home'),
 ]

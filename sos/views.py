@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CustomerForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
-from sos.models import Customer, Invoice,Invoice_Details, Event, Project, Tax
+from sos.forms import OrganizationForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
+from sos.models import Organization, Invoice,Invoice_Details, Event, Project, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -336,42 +336,42 @@ class TaxDetail(DetailView):
         context['now'] = timezone.now()
         return context
 
-class CustomerList(ListView):
-    title = 'Tax List'
-    template_name = 'customer_list.html'
-    model = Customer
-    form_class = CustomerForm
+class OrganizationList(ListView):
+    title = 'Organization List'
+    template_name = 'organization_list.html'
+    model = Organization
+    form_class = OrganizationForm
 
-class CustomerCreate(SuccessMessageMixin, CreateView):
-    title = 'Customer Create'
-    template_name = 'customer_create.html'
-    model = Customer
-    form_class = CustomerForm
+class OrganizationCreate(SuccessMessageMixin, CreateView):
+    title = 'Organization Create'
+    template_name = 'organization_create.html'
+    model = Organization
+    form_class = OrganizationForm
     success_message = "%(name)s was created successfully"
     def get_success_url(self):
-        return reverse('customer-list')
+        return reverse('organization-list')
 
-class CustomerEdit(UpdateView):
-    title = 'Customer Edit'
-    template_name = 'customer_edit.html'
-    model = Customer
-    form_class = CustomerForm
+class OrganizationEdit(UpdateView):
+    title = 'Organization Edit'
+    template_name = 'organization_edit.html'
+    model = Organization
+    form_class = OrganizationForm
 
-class CustomerDelete(DeleteView):
-    title = 'Customer Delete'
-    template_name = 'customer_confirm_delete.html'
-    model = Customer
-    success_url = reverse_lazy('customer-list')
-    success_message = "Customer was deleted successfully"
+class OrganizationDelete(DeleteView):
+    title = 'Organization Delete'
+    template_name = 'organization_confirm_delete.html'
+    model = Organization
+    success_url = reverse_lazy('organization-list')
+    success_message = "Organization was deleted successfully"
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
-        return super(CustomerDelete, self).delete(request, *args, **kwargs)
+        return super(OrganizationDelete, self).delete(request, *args, **kwargs)
 
-class CustomerDetail(DetailView):
-    title = 'Customer Detail'
-    template_name = 'customer_detail.html'
-    model = Customer
+class OrganizationDetail(DetailView):
+    title = 'Organization Detail'
+    template_name = 'organization_detail.html'
+    model = Organization
     def get_context_data(self, **kwargs):
-        context = super(CustomerDetail, self).get_context_data(**kwargs)
+        context = super(OrganizationDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context

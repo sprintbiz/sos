@@ -100,6 +100,32 @@ class Customer (models.Model):
     def get_absolute_url(self):
         return reverse('customer-edit', kwargs={'pk': self.id})
 
+class Organization (models.Model):
+
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=60)
+    street_name = models.CharField(max_length=60, blank=True)
+    street_number = models.CharField(max_length=10, blank=True)
+    zip_code = models.CharField(max_length=60, blank=True)
+    city = models.CharField(max_length=60, blank=True)
+    country = models.CharField(max_length=60, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    email = models.CharField(max_length=60, blank=True)
+    code = models.CharField(max_length=30, blank=True)
+    type_code = models.CharField(max_length=30, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organization'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('organization-edit', kwargs={'pk': self.id})
+
 class Service (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
