@@ -60,7 +60,7 @@ class Client (models.Model):
     name = models.CharField(max_length=60)
     street_name = models.CharField(max_length=60, blank=True)
     street_number = models.CharField(max_length=10, blank=True)
-    zip_code = city = models.CharField(max_length=60, blank=True)
+    zip_code = models.CharField(max_length=60, blank=True)
     city = models.CharField(max_length=60, blank=True)
     country = models.CharField(max_length=60, blank=True)
     phone = models.CharField(max_length=15, blank=True)
@@ -75,6 +75,30 @@ class Client (models.Model):
 
     def __unicode__(self):
         return self.name
+
+class Customer (models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=60)
+    street_name = models.CharField(max_length=60, blank=True)
+    street_number = models.CharField(max_length=10, blank=True)
+    zip_code = models.CharField(max_length=60, blank=True)
+    city = models.CharField(max_length=60, blank=True)
+    country = models.CharField(max_length=60, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    email = models.CharField(max_length=60, blank=True)
+    code = models.CharField(max_length=30, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Customer'
+        verbose_name_plural = 'Customer'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('customer-edit', kwargs={'pk': self.id})
 
 class Service (models.Model):
     id = models.AutoField(primary_key=True)

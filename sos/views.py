@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
-from sos.models import Invoice,Invoice_Details, Event, Project, Tax
+from sos.forms import CustomerForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
+from sos.models import Customer, Invoice,Invoice_Details, Event, Project, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -333,5 +333,45 @@ class TaxDetail(DetailView):
     model = Tax
     def get_context_data(self, **kwargs):
         context = super(TaxDetail, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+class CustomerList(ListView):
+    title = 'Tax List'
+    template_name = 'customer_list.html'
+    model = Customer
+    form_class = CustomerForm
+
+class CustomerCreate(SuccessMessageMixin, CreateView):
+    title = 'Customer Create'
+    template_name = 'customer_create.html'
+    model = Customer
+    form_class = CustomerForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('customer-list')
+
+class CustomerEdit(UpdateView):
+    title = 'Customer Edit'
+    template_name = 'customer_edit.html'
+    model = Customer
+    form_class = CustomerForm
+
+class CustomerDelete(DeleteView):
+    title = 'Customer Delete'
+    template_name = 'customer_confirm_delete.html'
+    model = Customer
+    success_url = reverse_lazy('customer-list')
+    success_message = "Customer was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(CustomerDelete, self).delete(request, *args, **kwargs)
+
+class CustomerDetail(DetailView):
+    title = 'Customer Detail'
+    template_name = 'customer_detail.html'
+    model = Customer
+    def get_context_data(self, **kwargs):
+        context = super(CustomerDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context

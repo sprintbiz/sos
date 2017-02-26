@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Invoice,Invoice_Details, Status, Company, Client, Service, Event, Project, Tax
+from sos.models import Invoice,Invoice_Details, Status, Company, Client, Customer, Service, Event, Project, Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 
@@ -54,3 +54,17 @@ class TaxForm(forms.ModelForm):
     class Meta:
         model = Tax
         fields = ['name','value']
+
+class CustomerForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-name', }))
+    street_name = forms.CharField(required =True, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-street-name', }))
+    street_number = forms.CharField(required =True, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-street-number', }))
+    zip_code = forms.CharField(required =True, label='Zip Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-zip-code', }))
+    city = forms.CharField(required =True, label='City', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-city', }))
+    country = forms.CharField(required =True, label='Country', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-country', }))
+    phone = forms.CharField(required =True, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-phone', }))
+    email = forms.CharField(required =True, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-email', }))
+    code = forms.CharField(required =True, label='Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-code', }))
+    class Meta:
+        model = Customer
+        fields = ['name','street_name','street_number','zip_code','city','country','phone','email','code']
