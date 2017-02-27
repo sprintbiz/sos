@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content-title %}Calendar{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="app-heading">
+    <div class="app-title">
+      <div class="title">{{title}}<span class="highlight"></span></div>
+      <div class="description"></div>
+    </div>
+    </div>
+  </div>
+</div>
+{% if messages %}
+<div class="row">
+  {% for message in messages %}
+  <div class="col-md-6 col-sm-12">
+    <div class="alert alert-success" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <strong>Well done!</strong> {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+      {{ message }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+    <div class="card-header">{{view.title}}
+    </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Customer</th>
+                    <th>Code</th>
+          		      <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+            	  {% if object_list %}
+            	   {% for project in object_list %}
+                  <tr>
+                    <th scope="row"><a href="{% url 'project-edit' project.id %}">{{ project.name }}</a></th>
+                    <td>{{ project.customer }}</td>
+                    <td>{{ project.code }}</td>
+          		      <td><a href="{% url 'project-delete' project.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td><a href="{% url 'project-detail' project.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
+                  </tr>
+          		 {% endfor %}
+          		{% else %}
+                <tr>
+                  <td colspan="5">There are no projects definied.</td>
+                </tr>
+              {% endif %}
+              </tbody>
+          	</table>
+          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'project-create' %}'">Create New</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

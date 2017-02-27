@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import OrganizationForm, ServiceForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
-from sos.models import Organization, Invoice,Invoice_Details, Event, Project, Service, Tax
+from sos.forms import EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
+from sos.models import Event, Invoice, Invoice_Details, Organization, Project, Service, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -375,6 +375,45 @@ class OrganizationDetail(DetailView):
         context = super(OrganizationDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+class ProjectList(ListView):
+    title = 'Project List'
+    template_name = 'project_list.html'
+    model = Project
+    form_class = ProjectForm
+
+class ProjectCreate(SuccessMessageMixin, CreateView):
+    title = 'Project Create'
+    template_name = 'project_create.html'
+    model = Project
+    form_class = ProjectForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('project-list')
+
+class ProjectDelete(DeleteView):
+    title = 'Project Delete'
+    template_name = 'project_confirm_delete.html'
+    model = Project
+    success_url = reverse_lazy('project-list')
+    success_message = "Project was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(ProjectDelete, self).delete(request, *args, **kwargs)
+
+class ProjectDetail(DetailView):
+    title = 'Project Detail'
+    template_name = 'project_detail.html'
+    model = Project
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetail, self).get_context_data(**kwargs)
+        return context
+
+class ProjectEdit(UpdateView):
+    title = 'Project Edit'
+    template_name = 'project_edit.html'
+    model = Project
+    form_class = ProjectForm
 
 class ServiceList(ListView):
     title = 'Service List'

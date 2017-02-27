@@ -128,10 +128,9 @@ class Organization (models.Model):
 
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client)
+    customer = models.ForeignKey(Organization)
     name = models.CharField(max_length=300)
     code = models.CharField(max_length=30)
-    hour  = models.DecimalField(max_digits=5, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

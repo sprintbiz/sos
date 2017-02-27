@@ -73,11 +73,11 @@ class OrganizationForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))
-    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(type_code = 'CUST') , label='Tax', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
-    code = forms.DecimalField(required =False, label='Price Per Hour', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-price-per-hour', }))
+    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(type_code = 'CUST') , label='Customer', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
+    code = forms.CharField(required =True, label='Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-code', }))
     class Meta:
         model = Project
-        fields = ['name','client','code']
+        fields = ['name','code','customer']
 
 
 class ServiceForm(forms.ModelForm):

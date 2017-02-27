@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -39,20 +39,25 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^tax/$', TaxList.as_view(), name='tax-list'),
-    url(r'^tax/create/$', TaxCreate.as_view(), name='tax-create'),
-    url(r'^tax/edit/(?P<pk>\w+)/$', TaxEdit.as_view(), name='tax-edit'),
-    url(r'^tax/delete/(?P<pk>\w+)/$', TaxDelete.as_view(), name='tax-delete'),
-    url(r'^tax/detail/(?P<pk>\w+)/$', TaxDetail.as_view(), name='tax-detail'),
     url(r'^organization/$', OrganizationList.as_view(), name='organization-list'),
     url(r'^organization/create/$', OrganizationCreate.as_view(), name='organization-create'),
     url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),
     url(r'^organization/delete/(?P<pk>\w+)/$', OrganizationDelete.as_view(), name='organization-delete'),
     url(r'^organization/detail/(?P<pk>\w+)/$', OrganizationDetail.as_view(), name='organization-detail'),
+    url(r'^project/$', ProjectList.as_view(), name='project-list'),
+    url(r'^project/create/$', ProjectCreate.as_view(), name='project-create'),
+    url(r'^project/delete/(?P<pk>\w+)/$', ProjectDelete.as_view(), name='project-delete'),
+    url(r'^project/detail/(?P<pk>\w+)/$', ProjectDetail.as_view(), name='project-detail'),
+    url(r'^project/edit/(?P<pk>\w+)/$', ProjectEdit.as_view(), name='project-edit'),
     url(r'^service/$', ServiceList.as_view(), name='service-list'),
     url(r'^service/create/$', ServiceCreate.as_view(), name='service-create'),
     url(r'^service/delete/(?P<pk>\w+)/$', ServiceDelete.as_view(), name='service-delete'),
     url(r'^service/detail/(?P<pk>\w+)/$', ServiceDetail.as_view(), name='service-detail'),
     url(r'^service/edit/(?P<pk>\w+)/$', ServiceEdit.as_view(), name='service-edit'),
+    url(r'^tax/$', TaxList.as_view(), name='tax-list'),
+    url(r'^tax/create/$', TaxCreate.as_view(), name='tax-create'),
+    url(r'^tax/delete/(?P<pk>\w+)/$', TaxDelete.as_view(), name='tax-delete'),
+    url(r'^tax/detail/(?P<pk>\w+)/$', TaxDetail.as_view(), name='tax-detail'),
+    url(r'^tax/edit/(?P<pk>\w+)/$', TaxEdit.as_view(), name='tax-edit'),
     url(r'^.*$', RedirectView.as_view(), name='home'),
 ]
