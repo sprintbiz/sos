@@ -4,6 +4,25 @@ from django.utils import timezone
 from django.db import models
 from django.core.urlresolvers import reverse
 
+
+class Code(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=30)
+    parrent = models.IntegerField(blank=True, null=True)
+    entity = models.CharField(max_length=30)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Code'
+        verbose_name_plural = 'Codes'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('code-edit', kwargs={'pk': self.id})
+
 class Status(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
@@ -17,6 +36,9 @@ class Status(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('status-edit', kwargs={'pk': self.id})
+
 class Tax (models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, blank=False)
@@ -26,7 +48,7 @@ class Tax (models.Model):
 
     class Meta:
         verbose_name = 'Tax'
-        verbose_name_plural = 'Tax'
+        verbose_name_plural = 'Taxes'
 
     def __unicode__(self):
         return self.name

@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Invoice,Invoice_Details, Status, Company, Client, Organization, Project, Service, Event, Project, Tax
+from sos.models import Client, Code, Company, Event, Invoice, Invoice_Details, Organization, Project, Service, Status, Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 
@@ -56,7 +56,6 @@ class TaxForm(forms.ModelForm):
         fields = ['name','value']
 
 class OrganizationForm(forms.ModelForm):
-    TYPE_CODE_CHOICES = (('CUST', 'Customer',), ('COMP', 'Company',))
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-name', }))
     street_name = forms.CharField(required =True, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-street-name', }))
     street_number = forms.CharField(required =True, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-street-number', }))
@@ -66,7 +65,7 @@ class OrganizationForm(forms.ModelForm):
     phone = forms.CharField(required =True, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-phone', }))
     email = forms.CharField(required =True, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-email', }))
     code = forms.CharField(required =True, label='Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'customer-code', }))
-    type_code = forms.ChoiceField(required =True, label='Code', widget= forms.Select(attrs={'class': 'form-control','id':'customer-code', }), choices=TYPE_CODE_CHOICES )
+    type_code = forms.ChoiceField(required =True, label='Code', widget= forms.Select(attrs={'class': 'form-control','id':'customer-code', }), choices=Code.objects.all().filter(entity='ORGANIZATION').values_list('id', 'name') )
     class Meta:
         model = Organization
         fields = ['name','street_name','street_number','zip_code','city','country','phone','email','code', 'type_code']

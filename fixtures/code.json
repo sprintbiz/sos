@@ -1,0 +1,46 @@
+[
+  {
+    "model": "sos.code",
+    "pk": 1,
+    "fields": {
+      "name": "Created",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 2,
+    "fields": {
+      "name": "Paid",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 3,
+    "fields": {
+      "name": "Customer",
+      "parrent": 0,
+      "entity": "ORGANIZATION",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 4,
+    "fields": {
+      "name": "Company",
+      "parrent": 0,
+      "entity": "ORGANIZATION",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  }
+]
