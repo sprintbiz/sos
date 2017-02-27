@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Invoice,Invoice_Details, Status, Company, Client, Organization, Service, Event, Project, Tax
+from sos.models import Invoice,Invoice_Details, Status, Company, Client, Organization, Project, Service, Event, Project, Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 
@@ -70,3 +70,21 @@ class OrganizationForm(forms.ModelForm):
     class Meta:
         model = Organization
         fields = ['name','street_name','street_number','zip_code','city','country','phone','email','code', 'type_code']
+
+class ProjectForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))
+    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(type_code = 'CUST') , label='Tax', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
+    code = forms.DecimalField(required =False, label='Price Per Hour', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-price-per-hour', }))
+    class Meta:
+        model = Project
+        fields = ['name','client','code']
+
+
+class ServiceForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-name', }))
+    tax = forms.ModelChoiceField(queryset = Tax.objects.all() , label='Tax', widget= forms.Select(attrs={'class': 'form-control','id':'service-tax', }))
+    price_per_hour = forms.DecimalField(required =False, label='Price Per Hour', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-price-per-hour', }))
+    fixed_price = forms.DecimalField(required =False, label='Fixed Price', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-fixed-price', }))
+    class Meta:
+        model = Service
+        fields = ['name','tax','price_per_hour','fixed_price']

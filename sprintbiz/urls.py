@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
+from sos.views import ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, NewInvoiceSaveView,InvoiceSaveView,TimescheetView
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -49,5 +49,10 @@ urlpatterns = [
     url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),
     url(r'^organization/delete/(?P<pk>\w+)/$', OrganizationDelete.as_view(), name='organization-delete'),
     url(r'^organization/detail/(?P<pk>\w+)/$', OrganizationDetail.as_view(), name='organization-detail'),
+    url(r'^service/$', ServiceList.as_view(), name='service-list'),
+    url(r'^service/create/$', ServiceCreate.as_view(), name='service-create'),
+    url(r'^service/delete/(?P<pk>\w+)/$', ServiceDelete.as_view(), name='service-delete'),
+    url(r'^service/detail/(?P<pk>\w+)/$', ServiceDetail.as_view(), name='service-detail'),
+    url(r'^service/edit/(?P<pk>\w+)/$', ServiceEdit.as_view(), name='service-edit'),
     url(r'^.*$', RedirectView.as_view(), name='home'),
 ]

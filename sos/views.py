@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import OrganizationForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
-from sos.models import Organization, Invoice,Invoice_Details, Event, Project, Tax
+from sos.forms import OrganizationForm, ServiceForm, InvoiceForm, InvoiceDetailForm, EventForm, TaxForm
+from sos.models import Organization, Invoice,Invoice_Details, Event, Project, Service, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -374,4 +374,43 @@ class OrganizationDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
+        return context
+
+class ServiceList(ListView):
+    title = 'Service List'
+    template_name = 'service_list.html'
+    model = Service
+    form_class = ServiceForm
+
+class ServiceCreate(SuccessMessageMixin, CreateView):
+    title = 'Service Create'
+    template_name = 'service_create.html'
+    model = Service
+    form_class = ServiceForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('service-list')
+
+class ServiceEdit(UpdateView):
+    title = 'Service Edit'
+    template_name = 'service_edit.html'
+    model = Service
+    form_class = ServiceForm
+
+class ServiceDelete(DeleteView):
+    title = 'Service Delete'
+    template_name = 'service_confirm_delete.html'
+    model = Service
+    success_url = reverse_lazy('service-list')
+    success_message = "Service was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(ServiceDelete, self).delete(request, *args, **kwargs)
+
+class ServiceDetail(DetailView):
+    title = 'Service Detail'
+    template_name = 'service_detail.html'
+    model = Service
+    def get_context_data(self, **kwargs):
+        context = super(ServiceDetail, self).get_context_data(**kwargs)
         return context

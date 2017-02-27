@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content-title %}Calendar{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="app-heading">
+    <div class="app-title">
+      <div class="title">{{title}}<span class="highlight"></span></div>
+      <div class="description"></div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+    <div class="card-header">{{view.title}} - {{ object.name }}
+    </div>
+      <div class="card-body">
+        <div class="row">
+          <table class="table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Name:</th>
+                  <td>{{ object.name }}</td>
+                </tr>
+                <tr>
+                  <th>Tax:</th>
+                  <td>{{ object.tax }}</td>
+                </tr>
+                <tr>
+                  <th>Price Per Hour:</th>
+                  <td>{{ object.price_per_hour }}</td>
+                </tr>
+                <tr>
+                  <th>Fixed Price:</th>
+                  <td>{{ object.fixed_price }}</td>
+                </tr>
+              </tbody>
+        	</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

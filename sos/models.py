@@ -126,12 +126,31 @@ class Organization (models.Model):
     def get_absolute_url(self):
         return reverse('organization-edit', kwargs={'pk': self.id})
 
+class Project(models.Model):
+    id = models.AutoField(primary_key=True)
+    client = models.ForeignKey(Client)
+    name = models.CharField(max_length=300)
+    code = models.CharField(max_length=30)
+    hour  = models.DecimalField(max_digits=5, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Projects'
+        verbose_name_plural = 'Projects'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('project-edit', kwargs={'pk': self.id})
+
 class Service (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
-    price_per_hour  = models.DecimalField(max_digits=5, decimal_places=2)
-    fixed_price = models.DecimalField(max_digits=5, decimal_places=2)
+    price_per_hour  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    fixed_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -141,6 +160,9 @@ class Service (models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('service-edit', kwargs={'pk': self.id})
 
 class Invoice (models.Model):
 
@@ -184,22 +206,6 @@ class Invoice_Details (models.Model):
 
 class Invoices (models.Model):
     name = models.ManyToManyField(Invoice)
-    def __unicode__(self):
-        return self.name
-
-class Project(models.Model):
-    id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client)
-    name = models.CharField(max_length=300)
-    code = models.CharField(max_length=30)
-    hour  = models.DecimalField(max_digits=5, decimal_places=2)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Projects'
-        verbose_name_plural = 'Projects'
-
     def __unicode__(self):
         return self.name
 
