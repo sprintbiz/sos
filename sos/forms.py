@@ -8,13 +8,14 @@ class InvoiceForm(forms.ModelForm):
     name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
-    status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE'), widget= forms.Select(attrs={'class': 'select2' }))
+    status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
     company = forms.ModelChoiceField(queryset = Organization.objects.all().filter(code__name='Company'), widget=forms.Select(attrs={'class':'select2'}))
     customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(code__name='Customer'), widget=forms.Select(attrs={'class':'select2'}))
     literal_value = forms.CharField(widget= forms.Textarea(attrs={'class': 'form-control',}))
+    payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
         model = Invoice
-        fields = ['id','name', 'create_date', 'payment_date','status','company','customer', 'literal_value',]
+        fields = ['id','name', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
 
 class InvoiceDetailForm(forms.ModelForm):
     hour = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))

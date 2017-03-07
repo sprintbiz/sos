@@ -50,5 +50,31 @@
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
+  },
+  {
+    "model": "sos.code",
+    "pk": 5,
+    "fields": {
+      "name": "Przelew",
+      "type": "TRAN",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "schema":"PAYMENT_METHOD",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 6,
+    "fields": {
+      "name": "Gotówka",
+      "type": "MONEY",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "schema":"PAYMENT_METHOD",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
   }
 ]

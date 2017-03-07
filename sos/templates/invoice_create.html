@@ -75,7 +75,15 @@
           {{ invoice.literal_value.errors }}
           <label>{{ invoice.literal_value.label }}</label>
 			    {{ invoice.literal_value }}
-
+          <div class="form-group">
+            {{ invoice.payment_method.errors }}
+						<label class="col-md-3 control-label">{{ invoice.payment_method.label }}</label>
+						<div class="col-md-9">
+							<div class="input-group">
+								{{ invoice.payment_method }}
+							</div>
+						</div>
+					</div>
           {% load formset_tags %}
 
         <div id="formset" data-formset-prefix="{{ invoice_detail.prefix }}">

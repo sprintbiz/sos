@@ -127,9 +127,10 @@ class Invoice (models.Model):
     name = models.CharField(max_length=10)
     create_date = models.DateField()
     payment_date = models.DateField()
-    status = models.ForeignKey(Code)
+    status = models.ForeignKey(Code, related_name='code_status')
     company = models.ForeignKey(Organization, related_name='organization_company')
     customer = models.ForeignKey(Organization, related_name='organization_customer')
+    payment_method = models.ForeignKey(Code, related_name='code_payment_method')
     literal_value = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -158,11 +159,6 @@ class Invoice_Details (models.Model):
     class Meta:
         verbose_name = 'Invoice detail'
         verbose_name_plural = 'Invoice detail'
-    def __unicode__(self):
-        return self.name
-
-class Invoices (models.Model):
-    name = models.ManyToManyField(Invoice)
     def __unicode__(self):
         return self.name
 
