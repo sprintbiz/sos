@@ -16,16 +16,16 @@
                         {{ invoice_object.company.name}}<br>
                         {{ invoice_object.company.street_name}} {{ invoice_object.company.street_number}},
                         {{ invoice_object.company.zip_code}} {{ invoice_object.company.city}}<br>
-                        NIP {{ invoice_object.company.code}}
+                        NIP {{ invoice_object.company.org_nbr}}
                     </address>
                 </div>
                 <div class="col-xs-6 text-right">
                     <address>
                         <strong>Odbiorca:</strong><br>
-                        {{ invoice_object.client.name}}<br>
-                        {{ invoice_object.client.street_name}} {{ invoice_object.client.street_number}},
-                        {{ invoice_object.client.zip_code}} {{ invoice_object.client.city}} <br>
-                        NIP {{ invoice_object.client.code}}
+                        {{ invoice_object.customer.name}}<br>
+                        {{ invoice_object.customer.street_name}} {{ invoice_object.customer.street_number}},
+                        {{ invoice_object.customer.zip_code}} {{ invoice_object.customer.city}} <br>
+                        NIP {{ invoice_object.customer.org_nbr}}
                     </address>
                 </div>
             </div>
