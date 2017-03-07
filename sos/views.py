@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
+from sos.forms import invoice_detail_formset, EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
 from sos.models import Event, Invoice, Invoice_Details, Organization, Project, Service, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -61,96 +61,106 @@ class InvoicePrintView(View):
         #return render(request,'invoice_detail.html',{'invoices' : object})
         return render(request,'invoice_print.html',{'invoice_object' : invoice_object,'invoice_detail_object' : invoice_detail_object, 'invoice_total' : invoice_total} )
 
-class InvoiceEditView(View):
-    def get(self, request, id):
-        action_url ='/invoice/'+id+'/edit/'
+class InvoiceEditView(UpdateView):
+    action_url =''
+    form_class = InvoiceForm
+    model = Invoice
+    template_name = 'invoice_create.html'
+    success_url = 'invoice/'
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        invoice_form = self.get_form(form_class)
+        invoice_detail_form = invoice_detail_formset(instance = self.object)
+        return self.render_to_response(
+            self.get_context_data(invoice=invoice_form,
+                                  invoice_detail=invoice_detail_form))
 
-        invoice = Invoice.objects.get(id=id)
-        invoice_form = InvoiceForm(instance=invoice)
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        invoice_detail_form = invoice_detail_formset(self.request.POST, instance=self.object)
+        if (form.is_valid() and invoice_detail_form.is_valid()):
+            return self.form_valid(form, invoice_detail_form)
+        else:
+            return self.form_invalid(form, invoice_detail_form)
 
-        Invoiceformset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=0)
-        formset = Invoiceformset(instance=invoice)
-        if request.method == "POST":
-            invoice_form = InvoiceForm(request.POST, instance=invoice)
-            formset = Invoiceformset(request.POST, instance=invoice)
-            if invoice_form.is_valid():
-                invoice_instance = invoice_form.save(commit=False)
-                formset = Invoiceformset(request.POST, request.FILES, instance=invoice_instance)
-                if formset.is_valid():
-                    invoice_instance.save()
-                    formset.save()
-        return render(request, 'invoice_create.html', { 'invoice' : invoice_form,'formset' : formset, 'action_url' : action_url,})
+    def form_valid(self, invoice_form, invoice_detail_form):
+        """
+        Called if all forms are valid. Creates a Recipe instance along with
+        associated Ingredients and Instructions and then redirects to a
+        success page.
+        """
+        self.object = invoice_form.save()
+        invoice_detail_form.instance = self.object
+        invoice_detail_form.save()
+        return HttpResponseRedirect(reverse('invoice-list'))
 
-    def post(self, request, id):
-        action_url ='/invoice/'+id+'/edit/'
+    def form_invalid(self, invoice_form, invoice_detail_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the
+        data-filled forms and errors.
+        """
+        return self.render_to_response(
+            self.get_context_data(invoice=invoice_form,
+                                  invoice_detail=invoice_detail_form))
 
-        invoice = Invoice.objects.get(id=id)
-        invoice_form = InvoiceForm(instance=invoice)
+class CreateInvoiceView(CreateView):
+    action_url = '/invoice/new/'
+    form_class = InvoiceForm
+    model = Invoice
+    template_name = 'invoice_create.html'
+    success_url = 'invoice/'
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        invoice_form = self.get_form(form_class)
+        invoice_detail_form = invoice_detail_formset()
+        return self.render_to_response(
+            self.get_context_data(invoice=invoice_form,
+                                  invoice_detail=invoice_detail_form))
 
-        Invoiceformset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=0)
-        formset = Invoiceformset(instance=invoice)
-        if request.method == "POST":
-            invoice_form = InvoiceForm(request.POST, instance=invoice)
-            formset = Invoiceformset(request.POST, instance=invoice)
-            if invoice_form.is_valid():
-                invoice_instance = invoice_form.save(commit=False)
-                formset = Invoiceformset(request.POST, request.FILES, instance=invoice_instance)
-                if formset.is_valid():
-                    invoice_instance.save()
-                    formset.save()
-        return render(request, 'invoice_create.html', { 'invoice' : invoice_form,'formset' : formset, 'action_url' : action_url,})
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        invoice_detail_form = invoice_detail_formset(self.request.POST)
+        if (form.is_valid() and invoice_detail_form.is_valid()):
+            return self.form_valid(form, invoice_detail_form)
+        else:
+            return self.form_invalid(form, invoice_detail_form)
 
-class CreateInvoiceView(View):
-    def get(self, request):
-        action_url = '/invoice/new/'
-        invoice_form = InvoiceForm()
-        Invoiceformset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=0)
-        detail_formset = Invoiceformset(queryset=Invoice_Details.objects.none())
-        return render(request,'invoice_create.html',{'invoice' : invoice_form,'formset' : detail_formset, 'action_url' : action_url,})
+    def form_valid(self, invoice_form, invoice_detail_form):
+        """
+        Called if all forms are valid. Creates a Recipe instance along with
+        associated Ingredients and Instructions and then redirects to a
+        success page.
+        """
+        self.object = invoice_form.save()
+        invoice_detail_form.instance = self.object
+        invoice_detail_form.save()
+        return HttpResponseRedirect(reverse('invoice-list'))
 
-    def post(self, request, ):
+    def form_invalid(self, invoice_form, invoice_detail_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the
+        data-filled forms and errors.
+        """
+        return self.render_to_response(
+            self.get_context_data(invoice=invoice_form,
+                                  invoice_detail=invoice_detail_form))
 
-        invoice_form = InvoiceForm(request.POST)
-        Invoiceformset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=0)
-        formset = Invoiceformset(request.POST)
-        if request.method == "POST":
-            invoice_form = InvoiceForm(request.POST)
-            formset = Invoiceformset(request.POST)
-            if invoice_form.is_valid():
-                invoice_instance = invoice_form.save(commit=False)
-                formset = Invoiceformset(request.POST, request.FILES, instance=invoice_instance)
-                if formset.is_valid():
-                    invoice_instance.save()
-                    formset.save()
-        action_url = '/invoice/' + str(invoice_instance.pk) + '/edit/'
-        print_url = '/invoice/' + str(invoice_instance.pk) + '/print/'
-        return render(request, 'invoice_create.html', { 'invoice' : invoice_form,'formset' : formset, 'action_url' : action_url, 'print_url' : print_url,})
-
-class InvoiceSaveView(View):
-    def post(self, request,id):
-        invoice_records = Invoice.objects.get(id=id)
-        Invoiceformset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=0,)
-        invoice_form = InvoiceForm(request.POST)
-        invoice_form_obj = invoice_form.save()
-        formset = Invoiceformset(request.POST )
-        for form in formset:
-            form_obj = form.save(commit=False)
-            form_obj.invoice_id = invoice_form_obj.id
-            form_obj.save()
-        return render(request,'invoice_create.html',{'invoice' : invoice_form,'formset' : formset,})
-
-class NewInvoiceSaveView(View):
-    def post(self, request):
-        invoice_form = InvoiceForm(request.POST)
-        formset =Invoiceformset(request.POST, )
-        if invoice_form.is_valid():
-            if formset.is_valid():
-                invoice_form_obj =invoice_form.save()
-                for form in formset:
-                    form_obj = form.save(commit=False)
-                    form_obj.invoice_id = invoice_form_obj.id
-                    form_obj.save()
-        return render(request,'invoice_create.html',{'invoice' : invoice_form,'formset' : formset,})
 
 class TimescheetView(View):
     def get(self, request):

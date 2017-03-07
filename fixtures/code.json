@@ -4,8 +4,10 @@
     "pk": 1,
     "fields": {
       "name": "Created",
+      "type": "CREA",
       "parrent": 0,
       "entity": "INVOICE",
+      "schema":"TYPE",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
@@ -15,8 +17,10 @@
     "pk": 2,
     "fields": {
       "name": "Paid",
+      "type": "PAID",
       "parrent": 0,
       "entity": "INVOICE",
+      "schema":"TYPE",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
@@ -26,8 +30,10 @@
     "pk": 3,
     "fields": {
       "name": "Customer",
+      "type": "CUST",
       "parrent": 0,
       "entity": "ORGANIZATION",
+      "schema":"TYPE",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
@@ -37,8 +43,10 @@
     "pk": 4,
     "fields": {
       "name": "Company",
+      "type": "COMP",
       "parrent": 0,
       "entity": "ORGANIZATION",
+      "schema":"TYPE",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }

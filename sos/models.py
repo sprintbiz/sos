@@ -8,8 +8,10 @@ from django.core.urlresolvers import reverse
 class Code(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
+    type = models.CharField(max_length=30)
     parrent = models.IntegerField(blank=True, null=True)
     entity = models.CharField(max_length=30)
+    schema = models.CharField(max_length=30)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -56,72 +58,6 @@ class Tax (models.Model):
     def get_absolute_url(self):
         return reverse('tax-edit', kwargs={'pk': self.id})
 
-class Company (models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    street_name = models.CharField(max_length=60, blank=True)
-    street_number = models.CharField(max_length=10, blank=True)
-    zip_code = city = models.CharField(max_length=60, blank=True)
-    city = models.CharField(max_length=60, blank=True)
-    country = models.CharField(max_length=60, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    email = models.CharField(max_length=60, blank=True)
-    code = models.CharField(max_length=30, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Company'
-        verbose_name_plural = 'Company'
-
-    def __unicode__(self):
-        return self.name
-
-class Client (models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    street_name = models.CharField(max_length=60, blank=True)
-    street_number = models.CharField(max_length=10, blank=True)
-    zip_code = models.CharField(max_length=60, blank=True)
-    city = models.CharField(max_length=60, blank=True)
-    country = models.CharField(max_length=60, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    email = models.CharField(max_length=60, blank=True)
-    code = models.CharField(max_length=30, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Client'
-        verbose_name_plural = 'Client'
-
-    def __unicode__(self):
-        return self.name
-
-class Customer (models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    street_name = models.CharField(max_length=60, blank=True)
-    street_number = models.CharField(max_length=10, blank=True)
-    zip_code = models.CharField(max_length=60, blank=True)
-    city = models.CharField(max_length=60, blank=True)
-    country = models.CharField(max_length=60, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    email = models.CharField(max_length=60, blank=True)
-    code = models.CharField(max_length=30, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Customer'
-        verbose_name_plural = 'Customer'
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('customer-edit', kwargs={'pk': self.id})
-
 class Organization (models.Model):
 
     id = models.AutoField(primary_key=True)
@@ -133,8 +69,8 @@ class Organization (models.Model):
     country = models.CharField(max_length=60, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     email = models.CharField(max_length=60, blank=True)
-    code = models.CharField(max_length=30, blank=True)
-    type_code = models.CharField(max_length=30, blank=True)
+    org_nbr = models.CharField(max_length=30, blank=True)
+    code = models.ForeignKey(Code)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -191,9 +127,9 @@ class Invoice (models.Model):
     name = models.CharField(max_length=10)
     create_date = models.DateField()
     payment_date = models.DateField()
-    status = models.ForeignKey(Status)
-    company = models.ForeignKey(Company)
-    client = models.ForeignKey(Client)
+    status = models.ForeignKey(Code)
+    company = models.ForeignKey(Organization, related_name='organization_company')
+    customer = models.ForeignKey(Organization, related_name='organization_customer')
     literal_value = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -20,31 +20,37 @@
 					<div class="col-md-6">
 					<form method="post" action="{{ action_url }}">
 			    {% csrf_token %}
+          {{ invoice.id }}
 					<div class="form-group">
+            {{ invoice.name.errors }}
 						<label class="col-md-3 control-label">{{ invoice.name.label }}</label>
 						<div class="col-md-9">
 							{{ invoice.name }}
 						</div>
 					</div>
 					<div class="form-group">
+            {{ invoice.status.errors }}
 						<label class="col-md-3 control-label">{{ invoice.status.label }}</label>
 						<div class="col-md-9">
 							{{ invoice.status }}
 						</div>
 					</div>
 					<div class="form-group">
+            {{ invoice.company.errors }}
 						<label class="col-md-3 control-label">{{ invoice.company.label }}</label>
 						<div class="col-md-9">
 							{{ invoice.company }}
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">{{ invoice.client.label }}</label>
+            {{ invoice.customer.errors }}
+						<label class="col-md-3 control-label">{{ invoice.customer.label }}</label>
 						<div class="col-md-9">
-							{{ invoice.client }}
+							{{ invoice.customer }}
 						</div>
 					</div>
 					<div class="form-group">
+            {{ invoice.create_date.errors }}
 						<label class="col-md-3 control-label">{{ invoice.create_date.label }}</label>
 						<div class="col-md-9">
 							<div class="input-group">
@@ -55,6 +61,7 @@
 						</div>
 					</div>
 					<div class="form-group">
+            {{ invoice.payment_date.errors }}
 						<label class="col-md-3 control-label">{{ invoice.payment_date.label }}</label>
 						<div class="col-md-9">
 							<div class="input-group">
@@ -65,57 +72,101 @@
 						</div>
 					</div>
 
-
+          {{ invoice.literal_value.errors }}
           <label>{{ invoice.literal_value.label }}</label>
 			    {{ invoice.literal_value }}
-			{% load formset_tags %}
 
-					<div id="formset" data-formset-prefix="{{ formset.prefix }}">
-					    {{ formset.management_form }}
+          {% load formset_tags %}
 
-					    <div data-formset-body>
-					        <!-- New forms will be inserted in here -->
-					        {% for form in formset %}
-					            <div data-formset-form>
-					                {{ form.id }}
-					                {{ form.service }}
-					                {{ form.hour }}
-					                <div class="hidden">{{ form.DELETE }}</div>
-					                <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-					            </div>
-					        {% endfor %}
-					    </div>
+        <div id="formset" data-formset-prefix="{{ invoice_detail.prefix }}">
+            {{ invoice_detail.management_form }}
+            {{ invoice_detail.non_form_errors }}
+            <div data-formset-body>
+                <!-- New forms will be inserted in here -->
+                {% for form in invoice_detail %}
+                <div data-formset-form>
+                  {{ form.id }}
+                      <div class="form-group">
+                        {{ form.service.errors }}
+                        <label class="col-md-3 control-label">{{ form.service.label }}</label>
+                        <div class="col-md-9">
+                          <div class="input-group">
+                            {{ form.service }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        {{ form.hour.errors }}
+                        <label class="col-md-3 control-label">{{ form.hour.label }}</label>
+                        <div class="col-md-9">
+                          <div class="input-group">
+                            {{ form.hour }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hidden">{{ form.DELETE }}</div>
+                      <button type="button" class="btn btn-default" data-formset-delete-button>Delete form</button>
+                    </div>
+                {% endfor %}
+            </div>
 
-					    <!-- The empty form template. By wrapping this in a <script> tag, the
-					    __prefix__ placeholder can easily be replaced in both attributes and
-					    any scripts -->
-					    <script type="form-template" data-formset-empty-form>
-					        {% escapescript %}
-					            <div data-formset-form>
-					                {{ formset.empty_form }}
-					                <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-					            </div>
-					        {% endescapescript %}
-					    </script>
+            <!-- The empty form template. By wrapping this in a <script> tag, the
+            __prefix__ placeholder can easily be replaced in both attributes and
+            any scripts -->
+            <script type="form-template" data-formset-empty-form>
+                {% escapescript %}
 
-					    <!-- This button will add a new form when clicked -->
+                <div data-formset-form>
+                  {{ invoice_detail.empty_form.id }}
+                      <div class="form-group">
+                        {{ invoice_detail.empty_form.service.errors }}
+                        <label class="col-md-3 control-label">{{ invoice_detail.empty_form.service.label }}</label>
+                        <div class="col-md-9">
+                          <div class="input-group">
+                            {{ invoice_detail.empty_form.service }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        {{ invoice_detail.empty_form.hour.errors }}
+                        <label class="col-md-3 control-label">{{ invoice_detail.empty_form.hour.label }}</label>
+                        <div class="col-md-9">
+                          <div class="input-group">
+                            {{ invoice_detail.empty_form.hour }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hidden">{{ form.DELETE }}</div>
+                      <button type="button" class="btn btn-default" data-formset-delete-button>Delete form</button>
+                    </div>
+
+                {% endescapescript %}
+            </script>
+
+
+
 					    <div class="btn-group">
 					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
 					        <input type="submit" value="Update invoice" class="btn btn-default"/>
 					        <a class="btn btn-default" href="{{ print_url }}">Print</a>
+                  <input type="button" value="Add another" data-formset-add>
 					    </div>
+            </div>
+          </div>
 
-					    <script>jQuery(function($) {
-					        $("#formset").formset({
-					            animateForms: true
-					        });
-									$( ".datepicker" ).datepicker({
-										beforeShowDay: $.datepicker.noWeekends
-									});
-					    });</script>
 
-					</div>
+
 				</form>
+        <script>jQuery(function($) {
+            $("#formset").formset({
+              animateForms: true,
+              reorderMode: 'dom',
+            });
+            $( ".datepicker" ).datepicker({
+              beforeShowDay: $.datepicker.noWeekends
+            });
+            $('select').select2();
+        });</script>
 				</div>
 				</div>
 			</div>
