@@ -25,22 +25,6 @@ class Code(models.Model):
     def get_absolute_url(self):
         return reverse('code-edit', kwargs={'pk': self.id})
 
-class Status(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Status'
-        verbose_name_plural = 'Status'
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('status-edit', kwargs={'pk': self.id})
-
 class Tax (models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, blank=False)

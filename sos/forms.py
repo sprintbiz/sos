@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Details, Organization, Project, Service, Status, Tax
+from sos.models import Code, Event, Invoice, Invoice_Details, Organization, Project, Service,  Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 from django.forms.models import inlineformset_factory
