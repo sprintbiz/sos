@@ -87,6 +87,27 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project-edit', kwargs={'pk': self.id})
 
+class Material (models.Model):
+    id = models.AutoField(primary_key=True)
+    tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+    group = models.ForeignKey(Code)
+    manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer')
+    dealer = models.ForeignKey(Organization, related_name='organization_dealer')
+    price  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Material'
+        verbose_name_plural = 'Materials'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('material-edit', kwargs={'pk': self.id})
+
 class Service (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
