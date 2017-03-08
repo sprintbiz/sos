@@ -69,8 +69,9 @@ class Organization (models.Model):
     country = models.CharField(max_length=60, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     email = models.CharField(max_length=60, blank=True)
-    org_nbr = models.CharField(max_length=30, blank=True)
-    code = models.ForeignKey(Code)
+    org_nbr_1 = models.CharField(max_length=30, blank=True)
+    org_nbr_2 = models.CharField(max_length=30, blank=True)
+    org_type = models.ForeignKey(Code)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

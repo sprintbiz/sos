@@ -9,8 +9,8 @@ class InvoiceForm(forms.ModelForm):
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
-    company = forms.ModelChoiceField(queryset = Organization.objects.all().filter(code__name='Company'), widget=forms.Select(attrs={'class':'select2'}))
-    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(code__name='Customer'), widget=forms.Select(attrs={'class':'select2'}))
+    company = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Company'), widget=forms.Select(attrs={'class':'select2'}))
+    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Customer'), widget=forms.Select(attrs={'class':'select2'}))
     literal_value = forms.CharField(widget= forms.Textarea(attrs={'class': 'form-control',}))
     payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
@@ -66,16 +66,16 @@ class OrganizationForm(forms.ModelForm):
     country = forms.CharField(required =True, label='Country', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-country', }))
     phone = forms.CharField(required =True, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-phone', }))
     email = forms.CharField(required =True, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-email', }))
-    org_nbr_1 = forms.CharField(required =True, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-code', }))
-    org_nbr_2 = forms.CharField(required =True, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-code', }))
-    code = forms.ModelChoiceField(required =True, label='Code', widget= forms.Select(attrs={'class': 'form-control','id':'organization-code', }), queryset=Code.objects.all().filter(entity='ORGANIZATION') )
+    org_nbr_1 = forms.CharField(required =True, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-1', }))
+    org_nbr_2 = forms.CharField(required =True, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-2', }))
+    org_type = forms.ModelChoiceField(required =True, label='Code', widget= forms.Select(attrs={'class': 'form-control','id':'organization-code', }), queryset=Code.objects.all().filter(entity='ORGANIZATION') )
     class Meta:
         model = Organization
-        fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr', 'code']
+        fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr_1','org_nbr_2','org_type']
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))
-    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(code = 1) , label='Customer', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
+    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type = 1) , label='Customer', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
     code = forms.CharField(required =True, label='Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-code', }))
     class Meta:
         model = Project
