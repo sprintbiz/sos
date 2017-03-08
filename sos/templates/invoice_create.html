@@ -85,8 +85,9 @@
 						</div>
 					</div>
           {% load formset_tags %}
-
-        <div id="formset" data-formset-prefix="{{ invoice_detail.prefix }}">
+        </div>
+        <div class="col-md-6">
+          <div id="formset" data-formset-prefix="{{ invoice_detail.prefix }}">
             {{ invoice_detail.management_form }}
             {{ invoice_detail.non_form_errors }}
             <div data-formset-body>
@@ -113,14 +114,12 @@
                         </div>
                       </div>
                       <div class="hidden">{{ form.DELETE }}</div>
-                      <button type="button" class="btn btn-default" data-formset-delete-button>Delete form</button>
+                      <div class="col-md-offset-9">
+                        <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+                      </div>
                     </div>
                 {% endfor %}
             </div>
-
-            <!-- The empty form template. By wrapping this in a <script> tag, the
-            __prefix__ placeholder can easily be replaced in both attributes and
-            any scripts -->
             <script type="form-template" data-formset-empty-form>
                 {% escapescript %}
 
@@ -144,15 +143,16 @@
                           </div>
                         </div>
                       </div>
-                      <div class="hidden">{{ form.DELETE }}</div>
-                      <button type="button" class="btn btn-default" data-formset-delete-button>Delete form</button>
+                      <div class="hidden">{{ invoice_detail.empty_form.DELETE }}</div>
+                      <div class="col-md-offset-9">
+                        <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+                      </div>
                     </div>
-
+                    <script>jQuery(function($) {
+                        $('.select2').select2();
+                    });</script>
                 {% endescapescript %}
             </script>
-
-
-
 					    <div class="btn-group">
 					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
 					        <input type="submit" value="Update invoice" class="btn btn-default"/>
@@ -160,26 +160,21 @@
 					    </div>
             </div>
           </div>
-
-
-
 				</form>
-        <script>jQuery(function($) {
-            $("#formset").formset({
-              animateForms: true,
-              reorderMode: 'dom',
-            });
-            $( ".datepicker" ).datepicker({
-              beforeShowDay: $.datepicker.noWeekends
-            });
-            $('select').select2();
-        });</script>
-				</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
+<script>jQuery(function($) {
+    $("#formset").formset({
+      animateForms: true,
+      reorderMode: 'dom',
+    });
+    $( ".datepicker" ).datepicker({
+      beforeShowDay: $.datepicker.noWeekends
+    });
+    $('.select2').select2();
+});</script>
 
 {% endblock %}
