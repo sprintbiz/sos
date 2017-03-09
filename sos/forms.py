@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Details, Organization, Project, Service,  Tax
+from sos.models import Code, Event, Invoice, Invoice_Details, Material, Organization, Project, Service,  Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 from django.forms.models import inlineformset_factory
@@ -19,14 +19,21 @@ class InvoiceForm(forms.ModelForm):
 
 class InvoiceDetailForm(forms.ModelForm):
     hour = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
-    service = forms.ModelChoiceField(queryset = Service.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    service = forms.ModelChoiceField(queryset = Service.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
 
-    class Media(object):
-        js = formset_media_js
+
 
     class Meta():
         model = Invoice_Details
         fields = ['service','hour',]
+
+class InvoiceMaterialForm(forms.ModelForm):
+    price = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
+    material = forms.ModelChoiceField(queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
+
+    class Meta():
+        model = Invoice_Details
+        fields = ['material','price',]
 
 class EventForm(forms.ModelForm):
     project = forms.ModelChoiceField(required =False, label='Project', queryset = Project.objects.all(), widget=forms.Select(attrs={'style':'width: 100%','class':'project-select', 'id':'project-select'}))
@@ -92,3 +99,4 @@ class ServiceForm(forms.ModelForm):
         fields = ['name','tax','price_per_hour','fixed_price']
 
 invoice_detail_formset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=1)
+invoice_material_formset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceMaterialForm, extra=1)

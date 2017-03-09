@@ -87,7 +87,7 @@
           {% load formset_tags %}
         </div>
         <div class="col-md-6">
-          <div id="formset" data-formset-prefix="{{ invoice_detail.prefix }}">
+          <div id="formset-service" data-formset-prefix="{{ invoice_detail.prefix }}">
             {{ invoice_detail.management_form }}
             {{ invoice_detail.non_form_errors }}
             <div data-formset-body>
@@ -160,6 +160,82 @@
 					    </div>
             </div>
           </div>
+
+          <div class="col-md-6">
+            <div id="formset-material" data-formset-prefix="{{ invoice_material.prefix }}">
+              {{ invoice_material.management_form }}
+              {{ invoice_material.non_form_errors }}
+              <div data-formset-body>
+                  <!-- New forms will be inserted in here -->
+                  {% for form in invoice_material %}
+                  <div data-formset-form>
+                    {{ form.id }}
+                        <div class="form-group">
+                          {{ form.material.errors }}
+                          <label class="col-md-3 control-label">{{ form.material.label }}</label>
+                          <div class="col-md-9">
+                            <div class="input-group">
+                              {{ form.material }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          {{ form.price.errors }}
+                          <label class="col-md-3 control-label">{{ form.price.label }}</label>
+                          <div class="col-md-9">
+                            <div class="input-group">
+                              {{ form.price }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="hidden">{{ form.DELETE }}</div>
+                        <div class="col-md-offset-9">
+                          <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+                        </div>
+                      </div>
+                  {% endfor %}
+              </div>
+              <script type="form-template" data-formset-empty-form>
+                  {% escapescript %}
+
+                  <div data-formset-form>
+                    {{ invoice_material.empty_form.id }}
+                        <div class="form-group">
+                          {{ invoice_material.empty_form.material.errors }}
+                          <label class="col-md-3 control-label">{{ invoice_material.empty_form.material.label }}</label>
+                          <div class="col-md-9">
+                            <div class="input-group">
+                              {{ invoice_material.empty_form.material }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          {{ invoice_material.empty_form.price.errors }}
+                          <label class="col-md-3 control-label">{{ invoice_material.empty_form.price.label }}</label>
+                          <div class="col-md-9">
+                            <div class="input-group">
+                              {{ invoice_material.empty_form.price }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="hidden">{{ invoice_material.empty_form.DELETE }}</div>
+                        <div class="col-md-offset-9">
+                          <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
+                        </div>
+                      </div>
+                      <script>jQuery(function($) {
+                          $('.select2').select2();
+                      });</script>
+                  {% endescapescript %}
+              </script>
+  					    <div class="btn-group">
+  					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
+  					        <input type="submit" value="Update invoice" class="btn btn-default"/>
+  					        <a class="btn btn-default" href="{{ print_url }}">Print</a>
+  					    </div>
+              </div>
+            </div>
+
 				</form>
 				</div>
 			</div>
@@ -167,7 +243,11 @@
 	</div>
 </div>
 <script>jQuery(function($) {
-    $("#formset").formset({
+    $("#formset-service").formset({
+      animateForms: true,
+      reorderMode: 'dom',
+    });
+    $("#formset-material").formset({
       animateForms: true,
       reorderMode: 'dom',
     });

@@ -92,8 +92,8 @@ class Material (models.Model):
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
     group = models.ForeignKey(Code)
-    manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer')
-    dealer = models.ForeignKey(Organization, related_name='organization_dealer')
+    manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer', blank=True, null=True)
+    dealer = models.ForeignKey(Organization, related_name='organization_dealer', blank=True, null=True)
     price  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -128,7 +128,6 @@ class Service (models.Model):
         return reverse('service-edit', kwargs={'pk': self.id})
 
 class Invoice (models.Model):
-
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=10)
     create_date = models.DateField()
@@ -156,15 +155,17 @@ class Invoice (models.Model):
 
 class Invoice_Details (models.Model):
     id = models.AutoField(primary_key=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, blank=True, null=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
-    hour  = models.DecimalField(max_digits=5, decimal_places=2)
+    hour  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    price  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     class Meta:
         verbose_name = 'Invoice detail'
-        verbose_name_plural = 'Invoice detail'
+        verbose_name_plural = 'Invoice details'
     def __unicode__(self):
         return self.name
 

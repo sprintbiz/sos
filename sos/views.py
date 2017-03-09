@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import invoice_detail_formset, EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
+from sos.forms import invoice_material_formset,invoice_detail_formset, EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
 from sos.models import Event, Invoice, Invoice_Details, Organization, Project, Service, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -72,9 +72,11 @@ class InvoiceEditView(UpdateView):
         form_class = self.get_form_class()
         invoice_form = self.get_form(form_class)
         invoice_detail_form = invoice_detail_formset(instance = self.object)
+        invoice_material_form = invoice_material_formset(instance = self.object)
         return self.render_to_response(
             self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form))
+                                  invoice_detail=invoice_detail_form,
+                                  invoice_material=invoice_material_form))
 
     def post(self, request, *args, **kwargs):
         """
@@ -86,12 +88,13 @@ class InvoiceEditView(UpdateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         invoice_detail_form = invoice_detail_formset(self.request.POST, instance=self.object)
-        if (form.is_valid() and invoice_detail_form.is_valid()):
-            return self.form_valid(form, invoice_detail_form)
+        invoice_material_form = invoice_material_formset(self.request.POST, instance=self.object)
+        if (form.is_valid() and invoice_detail_form.is_valid() and invoice_material_form.is_valid()):
+            return self.form_valid(form, invoice_detail_form, invoice_material_form)
         else:
-            return self.form_invalid(form, invoice_detail_form)
+            return self.form_invalid(form, invoice_detail_form, invoice_material_form)
 
-    def form_valid(self, invoice_form, invoice_detail_form):
+    def form_valid(self, invoice_form, invoice_detail_form, invoice_material_form):
         """
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
@@ -100,16 +103,19 @@ class InvoiceEditView(UpdateView):
         self.object = invoice_form.save()
         invoice_detail_form.instance = self.object
         invoice_detail_form.save()
+        invoice_material_form.instance = self.object
+        invoice_material_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
-    def form_invalid(self, invoice_form, invoice_detail_form):
+    def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
         """
         Called if a form is invalid. Re-renders the context data with the
         data-filled forms and errors.
         """
         return self.render_to_response(
             self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form))
+                                  invoice_detail=invoice_detail_form,
+                                  invoice_material=invoice_material_form))
 
 class CreateInvoiceView(CreateView):
     action_url = '/invoice/new/'
@@ -121,10 +127,12 @@ class CreateInvoiceView(CreateView):
         self.object = None
         form_class = self.get_form_class()
         invoice_form = self.get_form(form_class)
-        invoice_detail_form = invoice_detail_formset()
+        invoice_detail_form = invoice_detail_formset(prefix='service')
+        invoice_material_form = invoice_material_formset(prefix='material')
         return self.render_to_response(
             self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form))
+                                  invoice_detail=invoice_detail_form,
+                                  invoice_material=invoice_material_form))
 
     def post(self, request, *args, **kwargs):
         """
@@ -137,11 +145,11 @@ class CreateInvoiceView(CreateView):
         form = self.get_form(form_class)
         invoice_detail_form = invoice_detail_formset(self.request.POST)
         if (form.is_valid() and invoice_detail_form.is_valid()):
-            return self.form_valid(form, invoice_detail_form)
+            return self.form_valid(form, invoice_detail_form, invoice_material)
         else:
-            return self.form_invalid(form, invoice_detail_form)
+            return self.form_invalid(form, invoice_detail_form, invoice_material)
 
-    def form_valid(self, invoice_form, invoice_detail_form):
+    def form_valid(self, invoice_form, invoice_detail_form, invoice_material_form):
         """
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
@@ -152,14 +160,15 @@ class CreateInvoiceView(CreateView):
         invoice_detail_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
-    def form_invalid(self, invoice_form, invoice_detail_form):
+    def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
         """
         Called if a form is invalid. Re-renders the context data with the
         data-filled forms and errors.
         """
         return self.render_to_response(
             self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form))
+                                  invoice_detail=invoice_detail_form,
+                                  invoice_material = invoice_material_form))
 
 
 class TimescheetView(View):
