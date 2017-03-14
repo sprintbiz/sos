@@ -22,6 +22,7 @@
           <thead>
             <tr>
               <th>ID</th>
+              <th>Type</th>
               <th>Invoice NBR</th>
               <th>Customer</th>
               <th>Created On</th>
@@ -33,6 +34,7 @@
             {% for field in invoices %}
             <tr>
               <td>{{ field.id}}</td>
+              <td>{{ field.type}}</td>
               <td><a href="{% url 'invoice-edit' field.id %}" >{{ field.name}}</a></td>
               <td>{{field.customer}}</td>
               <td>{{field.create_date}}</td>
