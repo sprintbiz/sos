@@ -89,13 +89,14 @@ class Project(models.Model):
 
 class Invoice (models.Model):
     id = models.AutoField(primary_key=True)
+    type = models.ForeignKey(Code, related_name='invoice_type')
     name = models.CharField(max_length=10)
     create_date = models.DateField()
     payment_date = models.DateField()
-    status = models.ForeignKey(Code, related_name='code_status')
+    status = models.ForeignKey(Code, related_name='invoice_status')
     company = models.ForeignKey(Organization, related_name='organization_company')
     customer = models.ForeignKey(Organization, related_name='organization_customer')
-    payment_method = models.ForeignKey(Code, related_name='code_payment_method')
+    payment_method = models.ForeignKey(Code, related_name='invoice_payment_method')
     literal_value = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
