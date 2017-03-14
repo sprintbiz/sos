@@ -19,32 +19,52 @@
       </div>
       <div class="card-body no-padding">
         <table class="datatable table table-striped primary" cellspacing="0" width="100%">
-  <thead>
-      <tr>
-          <th>ID</th>
-          <th>Invoice NBR</th>
-          <th>Hours</th>
-          <th>Service</th>
-          <th>Created On</th>
-          <th>Status</th>
-      </tr>
-  </thead>
-
-  <tbody>
-    {% for field in invoices %}
-      <tr>
-          <td>{{ field.invoice_id}}</td>
-          <td><a href="{% url 'invoice-edit' field.invoice_id %}" >{{ field.invoice__name}}</a></td>
-          <td>{{ field.hour}}</td>
-          <td>{{ field.service__name}}</td>
-          <td>{{ field.invoice__create_date}}</td>
-          <td>{{ field.invoice__status__name}}</td>
-      </tr>
-  {% endfor %}
-  </tbody>
-  </div>
-  </div>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Invoice NBR</th>
+              <th>Service</th>
+              <th>Created On</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for field in invoices %}
+            <tr>
+              <td>{{ field.id}}</td>
+              <td><a href="{% url 'invoice-edit' field.id %}" >{{ field.name}}</a></td>
+              <td>{{field.customer}}</td>
+              <td>{{field.create_date}}</td>
+              <td>{{field.status}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if is_paginated %}
+        <div class="card-body">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li><a href="{% url 'invoice-list' %}{{ page_obj.previous_page_number }}/">&laquo;</a></li>
+          {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+              <li><a href="{% url 'invoice-list' %}{{ i }}/">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li><a href="{% url 'invoice-list' %}{{ page_obj.next_page_number }}/">&raquo;</a></li>
+          {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+          {% endif %}
+        </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
-
 {% endblock %}

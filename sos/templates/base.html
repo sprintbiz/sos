@@ -13,7 +13,7 @@
 	<link rel="stylesheet" type="text/css" href='{% static 'css/theme/yellow.css' %}'>
 	<link rel="stylesheet" type="text/css" href='{% static 'css/jquery-ui.css' %}'>
 	<link rel="stylesheet" type="text/css" href='{% static 'css/fullcalendar.min.css' %}'>
-
+	<link rel="stylesheet" type="text/css" href='{% static 'css/font-awesome.css' %}'>
 
 	<script type="text/javascript" src='{% static 'js/respond.min.js' %}'></script>
 	<script type="text/javascript" src='{% static 'js/moment.min.js' %}'></script>
@@ -75,6 +75,7 @@
 			</a>
 			<div class="dropdown-menu">
 				<ul>
+					<li><a href="{% url 'material-list' %}">Material</a></li>
 					<li><a href="{% url 'organization-list' %}">Organization</a></li>
 					<li><a href="{% url 'project-list' %}">Project</a></li>
 					<li><a href="{% url 'service-list' %}">Service</a></li>

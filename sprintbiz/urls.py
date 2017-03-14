@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -23,6 +23,7 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^dashboard/$', Dashboard.as_view(), name='dashboard'),
+    url(r'^invoice/(?P<page>\d+)/$', InvoiceListView.as_view(), name='invoice-list-page'),
     url(r'^invoice/$', InvoiceListView.as_view(), name='invoice-list'),
     url(r'^invoice/(?P<pk>\d+)/edit/$', InvoiceEditView.as_view(), name='invoice-edit'),
     url(r'^invoice/([0-9]+)/print/$', InvoicePrintView.as_view(), name='invoice-print'),
@@ -38,6 +39,11 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^material/$', MaterialList.as_view(), name='material-list'),
+    url(r'^material/create/$', MaterialCreate.as_view(), name='material-create'),
+    url(r'^material/edit/(?P<pk>\w+)/$', MaterialEdit.as_view(), name='material-edit'),
+    url(r'^material/delete/(?P<pk>\w+)/$', MaterialDelete.as_view(), name='material-delete'),
+    url(r'^material/detail/(?P<pk>\w+)/$', MaterialDetail.as_view(), name='material-detail'),
     url(r'^organization/$', OrganizationList.as_view(), name='organization-list'),
     url(r'^organization/create/$', OrganizationCreate.as_view(), name='organization-create'),
     url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),

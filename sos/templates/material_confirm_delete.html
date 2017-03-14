@@ -20,26 +20,12 @@
       <div class="card-body">
         <div class="row">
           <form action="" method="post">{% csrf_token %}
-            {% for field in form %}
-            <div class="form-group">
-            	<label class="col-md-3 control-label">{{ field.label_tag }}</label>
-            	<div class="col-md-9">
-                {{ field }}
-                {{ field.errors }}
-            	</div>
-              {% if field.help_text %}
-              <p class="help">{{ field.help_text|safe }}</p>
-              {% endif %}
-            </div>
-            {% endfor %}
-            <input class="btn btn-success" type="submit" value="Save" />
+              <p>Are you sure you want to delete "{{ object }}"?</p>
+              <input class="btn btn-success" type="submit" value="Confirm" />
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
-<script type="text/javascript">
-  $('.select').select2();
-</script>
 {% endblock %}

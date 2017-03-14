@@ -76,5 +76,44 @@
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
+  },
+  {
+    "model": "sos.code",
+    "pk": 7,
+    "fields": {
+      "name": "Manufacturer",
+      "type": "MANU",
+      "parrent": 0,
+      "entity": "ORGANIZATION",
+      "schema":"TYPE",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 8,
+    "fields": {
+      "name": "Dealer",
+      "type": "DEAL",
+      "parrent": 0,
+      "entity": "ORGANIZATION",
+      "schema":"TYPE",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 9,
+    "fields": {
+      "name": "Car",
+      "type": "CAR",
+      "parrent": 0,
+      "entity": "MATERIAL",
+      "schema":"GROUP",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
   }
 ]

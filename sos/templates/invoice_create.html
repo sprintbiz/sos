@@ -12,249 +12,302 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
-    <div class="card-header">{{title}}
-    </div>
-      <div class="card-body">
-        <div class="row">
-					<div class="col-md-6">
-					<form method="post" action="{{ action_url }}">
-			    {% csrf_token %}
-          {{ invoice.id }}
-					<div class="form-group">
-            {{ invoice.name.errors }}
-						<label class="col-md-3 control-label">{{ invoice.name.label }}</label>
-						<div class="col-md-9">
-							{{ invoice.name }}
-						</div>
-					</div>
-					<div class="form-group">
-            {{ invoice.status.errors }}
-						<label class="col-md-3 control-label">{{ invoice.status.label }}</label>
-						<div class="col-md-9">
-							{{ invoice.status }}
-						</div>
-					</div>
-					<div class="form-group">
-            {{ invoice.company.errors }}
-						<label class="col-md-3 control-label">{{ invoice.company.label }}</label>
-						<div class="col-md-9">
-							{{ invoice.company }}
-						</div>
-					</div>
-					<div class="form-group">
-            {{ invoice.customer.errors }}
-						<label class="col-md-3 control-label">{{ invoice.customer.label }}</label>
-						<div class="col-md-9">
-							{{ invoice.customer }}
-						</div>
-					</div>
-					<div class="form-group">
-            {{ invoice.create_date.errors }}
-						<label class="col-md-3 control-label">{{ invoice.create_date.label }}</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon" id="basic-addon1">
-									<i class="fa fa-calendar" aria-hidden="true"></i></span>
-								{{ invoice.create_date }}
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-            {{ invoice.payment_date.errors }}
-						<label class="col-md-3 control-label">{{ invoice.payment_date.label }}</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon" id="basic-addon1">
-									<i class="fa fa-calendar" aria-hidden="true"></i></span>
-								{{ invoice.payment_date }}
-							</div>
-						</div>
-					</div>
+    <div class="card card-tab card-mini">
+      <div class="card-header">{{title}}
+        <ul class="nav nav-tabs">
+          <li role="tab1" class="active">
+            <a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Invoice</a>
+          </li>
+          <li role="tab2">
+            <a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Service</a>
+          </li>
+          <li role="tab3">
+            <a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Material</a>
+          </li>
+        </ul>
+      </div>
+      <form method="post" action="{{ action_url }}">
+      {% csrf_token %}
+      <div class="card-body tab-content no-padding">
+        <div role="tabpanel" class="tab-pane active" id="tab1">
+          <div class="row">
+  					<div class="col-md-6">
+            {{ invoice_form.id }}
+  					<div class="form-group">
+              {{ invoice_form.name.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.name.label }}</label>
+  						<div class="col-md-9">
+  							{{ invoice_form.name }}
+  						</div>
+  					</div>
+  					<div class="form-group">
+              {{ invoice_form.status.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.status.label }}</label>
+  						<div class="col-md-9">
+  							{{ invoice_form.status }}
+  						</div>
+  					</div>
+  					<div class="form-group">
+              {{ invoice_form.company.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.company.label }}</label>
+  						<div class="col-md-9">
+  							{{ invoice_form.company }}
+  						</div>
+  					</div>
+  					<div class="form-group">
+              {{ invoice_form.customer.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.customer.label }}</label>
+  						<div class="col-md-9">
+  							{{ invoice_form.customer }}
+  						</div>
+  					</div>
+  					<div class="form-group">
+              {{ invoice_form.create_date.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.create_date.label }}</label>
+  						<div class="col-md-9">
+  							<div class="input-group">
+  								<span class="input-group-addon" id="basic-addon1">
+  									<i class="fa fa-calendar" aria-hidden="true"></i></span>
+  								{{ invoice_form.create_date }}
+  							</div>
+  						</div>
+  					</div>
+  					<div class="form-group">
+              {{ invoice_form.payment_date.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.payment_date.label }}</label>
+  						<div class="col-md-9">
+  							<div class="input-group">
+  								<span class="input-group-addon" id="basic-addon1">
+  									<i class="fa fa-calendar" aria-hidden="true"></i></span>
+  								{{ invoice_form.payment_date }}
+  							</div>
+  						</div>
+  					</div>
 
-          {{ invoice.literal_value.errors }}
-          <label>{{ invoice.literal_value.label }}</label>
-			    {{ invoice.literal_value }}
-          <div class="form-group">
-            {{ invoice.payment_method.errors }}
-						<label class="col-md-3 control-label">{{ invoice.payment_method.label }}</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								{{ invoice.payment_method }}
-							</div>
-						</div>
-					</div>
-          {% load formset_tags %}
-        </div>
-        <div class="col-md-6">
-          <div id="formset-service" data-formset-prefix="{{ invoice_detail.prefix }}">
-            {{ invoice_detail.management_form }}
-            {{ invoice_detail.non_form_errors }}
-            <div data-formset-body>
-                <!-- New forms will be inserted in here -->
-                {% for form in invoice_detail %}
-                <div data-formset-form>
-                  {{ form.id }}
-                      <div class="form-group">
-                        {{ form.service.errors }}
-                        <label class="col-md-3 control-label">{{ form.service.label }}</label>
-                        <div class="col-md-9">
-                          <div class="input-group">
-                            {{ form.service }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        {{ form.hour.errors }}
-                        <label class="col-md-3 control-label">{{ form.hour.label }}</label>
-                        <div class="col-md-9">
-                          <div class="input-group">
-                            {{ form.hour }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="hidden">{{ form.DELETE }}</div>
-                      <div class="col-md-offset-9">
-                        <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-                      </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <script type="form-template" data-formset-empty-form>
-                {% escapescript %}
-
-                <div data-formset-form>
-                  {{ invoice_detail.empty_form.id }}
-                      <div class="form-group">
-                        {{ invoice_detail.empty_form.service.errors }}
-                        <label class="col-md-3 control-label">{{ invoice_detail.empty_form.service.label }}</label>
-                        <div class="col-md-9">
-                          <div class="input-group">
-                            {{ invoice_detail.empty_form.service }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        {{ invoice_detail.empty_form.hour.errors }}
-                        <label class="col-md-3 control-label">{{ invoice_detail.empty_form.hour.label }}</label>
-                        <div class="col-md-9">
-                          <div class="input-group">
-                            {{ invoice_detail.empty_form.hour }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="hidden">{{ invoice_detail.empty_form.DELETE }}</div>
-                      <div class="col-md-offset-9">
-                        <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-                      </div>
-                    </div>
-                    <script>jQuery(function($) {
-                        $('.select2').select2();
-                    });</script>
-                {% endescapescript %}
-            </script>
-					    <div class="btn-group">
-					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
-					        <input type="submit" value="Update invoice" class="btn btn-default"/>
-					        <a class="btn btn-default" href="{{ print_url }}">Print</a>
-					    </div>
-            </div>
+            {{ invoice_form.literal_value.errors }}
+            <label>{{ invoice_form.literal_value.label }}</label>
+  			    {{ invoice_form.literal_value }}
+            <div class="form-group">
+              {{ invoice_form.payment_method.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.payment_method.label }}</label>
+  						<div class="col-md-9">
+  							<div class="input-group">
+  								{{ invoice_form.payment_method }}
+  							</div>
+  						</div>
+  					</div>
+            {% load formset_tags %}
           </div>
 
-          <div class="col-md-6">
-            <div id="formset-material" data-formset-prefix="{{ invoice_material.prefix }}">
-              {{ invoice_material.management_form }}
-              {{ invoice_material.non_form_errors }}
-              <div data-formset-body>
-                  <!-- New forms will be inserted in here -->
-                  {% for form in invoice_material %}
-                  <div data-formset-form>
-                    {{ form.id }}
-                        <div class="form-group">
-                          {{ form.material.errors }}
-                          <label class="col-md-3 control-label">{{ form.material.label }}</label>
-                          <div class="col-md-9">
-                            <div class="input-group">
-                              {{ form.material }}
+  				</div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tab2">
+          <div class="row">
+            <div class="col-md-6">
+              <div id="formset-service" data-formset-prefix="{{ invoice_service.prefix }}">
+                {{ invoice_service.management_form }}
+                {{ invoice_service.non_form_errors }}
+                <div id="formset-service-container">
+                    <!-- LOOP THROU MATERIALS-->
+                    {% for form in invoice_service %}
+                    <div id="service-{{ forloop.counter0 }}">
+                      {{ form.id }}
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form.service.label }}</label>
+                            <div class="col-md-9">
+                              <div class="input-group">
+                                {{ form.service }}
+                              </div>
+                              {{ form.service.errors }}
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group">
-                          {{ form.price.errors }}
-                          <label class="col-md-3 control-label">{{ form.price.label }}</label>
-                          <div class="col-md-9">
-                            <div class="input-group">
-                              {{ form.price }}
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form.hour.label }}</label>
+                            <div class="col-md-9">
+                              <div class="input-group">
+                                {{ form.hour }}
+                              </div>
+                              {{ form.hour.errors }}
                             </div>
                           </div>
+                          <a href="#" id="delete-material-button" class="btn btn-info remove-material" data-index="{{ forloop.counter0 }}" data-type="service">Delete Service</a>
+                          <div class="hidden">{{ form.DELETE }}</div>
                         </div>
-                        <div class="hidden">{{ form.DELETE }}</div>
-                        <div class="col-md-offset-9">
-                          <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-                        </div>
-                      </div>
-                  {% endfor %}
+                    {% endfor %}
+                  </div>
+                  <a href="#" id="add-item-button" class="btn btn-info add-service">Add Service</a>
+                </div>
               </div>
-              <script type="form-template" data-formset-empty-form>
-                  {% escapescript %}
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tab3">
+          <div class="row">
+            <div class="col-md-6">
+              <div id="formset-material" data-formset-prefix="{{ invoice_material.prefix }}">
+                {{ invoice_material.management_form }}
+                {{ invoice_material.non_form_errors }}
+                <div id="formset-material-container">
+                    <!-- LOOP THROU MATERIALS-->
+                    {% for form in invoice_material %}
+                    <div id="material-{{ forloop.counter0 }}">
+                      {{ form.id }}
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form.material.label }}</label>
+                            <div class="col-md-9">
+                              <div class="input-group">
+                                {{ form.material }}
+                              </div>
+                              {{ form.material.errors }}
+                            </div>
+                          </div>
+                          <div class="form-group">
 
-                  <div data-formset-form>
-                    {{ invoice_material.empty_form.id }}
-                        <div class="form-group">
-                          {{ invoice_material.empty_form.material.errors }}
-                          <label class="col-md-3 control-label">{{ invoice_material.empty_form.material.label }}</label>
-                          <div class="col-md-9">
-                            <div class="input-group">
-                              {{ invoice_material.empty_form.material }}
+                            <label class="col-md-3 control-label">{{ form.item.label }}</label>
+                            <div class="col-md-9">
+                              <div class="input-group">
+                                {{ form.item }}
+                              </div>
+                              {{ form.item.errors }}
                             </div>
                           </div>
+                            <a href="#" id="delete-service-button" class="btn btn-info remove-service" data-index="{{ forloop.counter0 }}" data-type="material">Delete Material</a>
+                          <div class="hidden">{{ form.DELETE }}</div>
                         </div>
-                        <div class="form-group">
-                          {{ invoice_material.empty_form.price.errors }}
-                          <label class="col-md-3 control-label">{{ invoice_material.empty_form.price.label }}</label>
-                          <div class="col-md-9">
-                            <div class="input-group">
-                              {{ invoice_material.empty_form.price }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="hidden">{{ invoice_material.empty_form.DELETE }}</div>
-                        <div class="col-md-offset-9">
-                          <button type="button" class="btn btn-default" data-formset-delete-button>Delete</button>
-                        </div>
-                      </div>
-                      <script>jQuery(function($) {
-                          $('.select2').select2();
-                      });</script>
-                  {% endescapescript %}
-              </script>
-  					    <div class="btn-group">
-  					        <input type="button" value="Add another" class="btn btn-default" data-formset-add>
-  					        <input type="submit" value="Update invoice" class="btn btn-default"/>
-  					        <a class="btn btn-default" href="{{ print_url }}">Print</a>
-  					    </div>
+                    {% endfor %}
+                </div>
+                        <a href="#" id="add-material-button" class="btn btn-info add-material">Add Material</a>
               </div>
-            </div>
-
-				</form>
-				</div>
-			</div>
-		</div>
-	</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><input type="submit" value="Update invoice" class="btn btn-success"/></div>
+    </form>
+  </div>
 </div>
+<!-- TEMPLATE FOR SERVICE DATA -->
+<script type="text/html" id="service-template">
+  <div id="service-__prefix__">
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ invoice_service.empty_form.service.label }}</label>
+      <div class="col-md-9">
+        <div class="input-group">
+          {{ invoice_service.empty_form.service }}
+        </div>
+        {{ invoice_service.empty_form.service.errors }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ invoice_service.empty_form.hour.label }}</label>
+      <div class="col-md-9">
+        <div class="input-group">
+          {{ invoice_service.empty_form.hour }}
+        </div>
+        {{ invoice_service.empty_form.hour.errors }}
+      </div>
+    </div>
+    <script>jQuery(function($) {
+        $( ".datepicker" ).datepicker({
+          beforeShowDay: $.datepicker.noWeekends
+        });
+        $('.select2').select2();
+    });
+    </script>
+  </div>
+</script>
+
+<script type="text/html" id="material-template">
+  <div id="service-__prefix__">
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ invoice_material.empty_form.material.label }}</label>
+      <div class="col-md-9">
+        <div class="input-group">
+          {{ invoice_material.empty_form.material }}
+        </div>
+        {{ invoice_material.empty_form.material.errors }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ invoice_material.empty_form.item.label }}</label>
+      <div class="col-md-9">
+        <div class="input-group">
+          {{ invoice_material.empty_form.item }}
+        </div>
+        {{ invoice_material.empty_form.item.errors }}
+      </div>
+    </div>
+    <script>jQuery(function($) {
+        $( ".datepicker" ).datepicker({
+          beforeShowDay: $.datepicker.noWeekends
+        });
+        $('.select2').select2();
+    });
+    </script>
+  </div>
+</script>
+
 <script>jQuery(function($) {
-    $("#formset-service").formset({
-      animateForms: true,
-      reorderMode: 'dom',
-    });
-    $("#formset-material").formset({
-      animateForms: true,
-      reorderMode: 'dom',
-    });
     $( ".datepicker" ).datepicker({
       beforeShowDay: $.datepicker.noWeekends
     });
     $('.select2').select2();
-});</script>
+});
+
+$(document).ready(function() {
+    $('.add-service').click(function(ev) {
+        ev.preventDefault();
+        var count = $('#formset-service-container').children().length;
+        var tmplMarkup = $('#service-template').html();
+        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+        $('div#formset-service-container').append(compiledTmpl);
+
+        // update form count
+        $('#id_service-TOTAL_FORMS').attr('value', count+1);
+
+        // some animate to scroll to view our new form
+        $('html, body').animate({
+                scrollTop: $("#add-item-button").position().top-200
+            }, 800);
+    });
+    $('.add-material').click(function(ev) {
+        ev.preventDefault();
+        var count = $('#formset-material-container').children().length;
+        var tmplMarkup = $('#material-template').html();
+        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+        $('div#formset-material-container').append(compiledTmpl);
+
+        // update form count
+        $('#id_material-TOTAL_FORMS').attr('value', count+1);
+
+        // some animate to scroll to view our new form
+        $('html, body').animate({
+                scrollTop: $("#add-material-button").position().top-200
+            }, 800);
+    });
+    $('.remove-service').click(function() {
+        var i = $(this).data('index');
+        var t = $(this).data('type');
+        var state = $('#id_'+t+'-'+i+'-DELETE').prop('checked');
+        if (state == false) {
+          $('#id_'+t+'-'+i+'-DELETE').prop('checked',true);
+          $( '#'+t+'-'+i ).hide();
+        } else {
+          $('#id_'+t+'-'+i+'-DELETE').prop('checked',false);
+        }
+    });
+    $('.remove-material').click(function() {
+        var i = $(this).data('index');
+        var t = $(this).data('type');
+        var state = $('#id_'+t+'-'+i+'-DELETE').prop('checked');
+        if (state == false) {
+          $('#id_'+t+'-'+i+'-DELETE').prop('checked',true);
+          $( '#'+t+'-'+i ).hide();
+        } else {
+          $('#id_'+t+'-'+i+'-DELETE').prop('checked',false);
+        }
+    });
+});
+
+</script>
 
 {% endblock %}
