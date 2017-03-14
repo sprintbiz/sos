@@ -87,6 +87,32 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project-edit', kwargs={'pk': self.id})
 
+class Invoice (models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=10)
+    create_date = models.DateField()
+    payment_date = models.DateField()
+    status = models.ForeignKey(Code, related_name='code_status')
+    company = models.ForeignKey(Organization, related_name='organization_company')
+    customer = models.ForeignKey(Organization, related_name='organization_customer')
+    payment_method = models.ForeignKey(Code, related_name='code_payment_method')
+    literal_value = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+    def get_absolute_url(self):
+        return reverse('invoice', args=[str(self.id),str(self.name)])
+    class Meta:
+        verbose_name = 'Invoice'
+        verbose_name_plural = 'Invoices'
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+    def __int__(self):
+        return self.id
+
 class Material (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
@@ -94,7 +120,7 @@ class Material (models.Model):
     group = models.ForeignKey(Code)
     manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer', blank=True, null=True)
     dealer = models.ForeignKey(Organization, related_name='organization_dealer', blank=True, null=True)
-    price  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    price  = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -127,47 +153,29 @@ class Service (models.Model):
     def get_absolute_url(self):
         return reverse('service-edit', kwargs={'pk': self.id})
 
-class Invoice (models.Model):
+class Invoice_Service (models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=10)
-    create_date = models.DateField()
-    payment_date = models.DateField()
-    status = models.ForeignKey(Code, related_name='code_status')
-    company = models.ForeignKey(Organization, related_name='organization_company')
-    customer = models.ForeignKey(Organization, related_name='organization_customer')
-    payment_method = models.ForeignKey(Code, related_name='code_payment_method')
-    literal_value = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
-
-    def get_absolute_url(self):
-        return reverse('invoice', args=[str(self.id),str(self.name)])
-    class Meta:
-        verbose_name = 'Invoice'
-        verbose_name_plural = 'Invoice'
-
-    def __unicode__(self):
-        return unicode(self.id) or u''
-
-    def __int__(self):
-        return self.id
-
-class Invoice_Details (models.Model):
-    id = models.AutoField(primary_key=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, blank=True, null=True)
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    name = models.CharField(max_length=60)
+    invoice = models.ForeignKey(Invoice)
+    service = models.ForeignKey(Service)
     hour  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    price  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
     class Meta:
-        verbose_name = 'Invoice detail'
-        verbose_name_plural = 'Invoice details'
-    def __unicode__(self):
-        return self.name
+        verbose_name = 'Invoice Service'
+        verbose_name_plural = 'Invoice Services'
+
+class Invoice_Material (models.Model):
+    id = models.AutoField(primary_key=True)
+    invoice = models.ForeignKey(Invoice)
+    material = models.ForeignKey(Material)
+    item  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Invoice Material'
+        verbose_name_plural = 'Invoice Materials'
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
