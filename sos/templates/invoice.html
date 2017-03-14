@@ -26,6 +26,7 @@
               <th>Service</th>
               <th>Created On</th>
               <th>Status</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -36,6 +37,7 @@
               <td>{{field.customer}}</td>
               <td>{{field.create_date}}</td>
               <td>{{field.status}}</td>
+              <td><a href="{% url 'invoice-print' field.id %}" ><i class="fa fa-print" style="color:#29c75f;" aria-hidden="true"></i></a></td>
             </tr>
             {% endfor %}
           </tbody>

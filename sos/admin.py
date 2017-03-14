@@ -3,7 +3,6 @@ from .models import Tax
 from .models import Service
 from .models import Organization
 from .models import Invoice
-from .models import Invoice_Details
 from .models import Project
 from .models import Event
 

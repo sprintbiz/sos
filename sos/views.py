@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import invoice_material_formset,invoice_detail_formset, EventForm, InvoiceDetailForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
-from sos.models import Event, Invoice, Invoice_Details, Organization, Project, Service, Tax
+from sos.forms import invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
+from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Tax
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -40,24 +40,23 @@ class Dashboard(View):
         params["name"] = "Sprintbiz"
         return render(request, 'dashboard.html', params)
 
-class InvoiceListView(View):
-    def get(self, request):
-        title ='Invoice List'
-        invoice = Invoice_Details.objects.select_related('invoice','service','status').values('invoice_id','invoice__name','hour','service__name','invoice__create_date','invoice__status__name')
-        invoice_detail_object = Invoice_Details.objects.filter(invoice__id=Invoice.objects.all())
-        return render(request,'invoice.html',{'invoices' : invoice, 'title' : title,})
+class InvoiceListView(ListView):
+    model = Invoice      # shorthand for setting queryset = models.Car.objects.all()
+    template_name = 'invoice.html'  # optional (the default is app_name/modelNameInLowerCase_list.html; which will look into your templates folder for that path and file)
+    context_object_name = 'invoices'    #default is object_list as well as model's_verbose_name_list and/or model's_verbose_name_plural_list, if defined in the model's inner Meta class
+    paginate_by = 10  #and that's it !!
 
 class InvoicePrintView(View):
     def get(self, request, id):
         invoice_object = Invoice.objects.get(id=id)
-        invoice_detail_object = Invoice_Details.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
+        invoice_detail_object = Invoice_Service.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
 		                                                       ,price_per_hour=ExpressionWrapper(F('service__price_per_hour'), output_field=FloatField())
 															   ,value=ExpressionWrapper(F('service__price_per_hour') * F('hour'), output_field=FloatField())
 															   ,tax_value=ExpressionWrapper((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField())
                                                                ,tax_prct=F('service__tax__value')
 															   ,gross_value=ExpressionWrapper((F('service__price_per_hour') * F('hour'))+(F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField())
 															   )
-        invoice_total = Invoice_Details.objects.filter(invoice_id=id).aggregate(total_tax=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField()),total_net=Sum(F('service__price_per_hour') * F('hour'), output_field=FloatField()),total_gross=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'), output_field=FloatField()))
+        invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(total_tax=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField()),total_net=Sum(F('service__price_per_hour') * F('hour'), output_field=FloatField()),total_gross=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'), output_field=FloatField()))
         #return render(request,'invoice_detail.html',{'invoices' : object})
         return render(request,'invoice_print.html',{'invoice_object' : invoice_object,'invoice_detail_object' : invoice_detail_object, 'invoice_total' : invoice_total} )
 
@@ -71,11 +70,11 @@ class InvoiceEditView(UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         invoice_form = self.get_form(form_class)
-        invoice_detail_form = invoice_detail_formset(instance = self.object)
-        invoice_material_form = invoice_material_formset(instance = self.object)
+        invoice_service_form = invoice_service_formset(instance = self.object, prefix='service')
+        invoice_material_form = invoice_material_formset(instance = self.object, prefix='material')
         return self.render_to_response(
-            self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form,
+            self.get_context_data(invoice_form=invoice_form,
+                                  invoice_service=invoice_service_form,
                                   invoice_material=invoice_material_form))
 
     def post(self, request, *args, **kwargs):
@@ -87,34 +86,34 @@ class InvoiceEditView(UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        invoice_detail_form = invoice_detail_formset(self.request.POST, instance=self.object)
-        invoice_material_form = invoice_material_formset(self.request.POST, instance=self.object)
-        if (form.is_valid() and invoice_detail_form.is_valid() and invoice_material_form.is_valid()):
-            return self.form_valid(form, invoice_detail_form, invoice_material_form)
+        invoice_service_form = invoice_service_formset(self.request.POST, instance=self.object, prefix='service')
+        invoice_material_form = invoice_material_formset(self.request.POST, instance=self.object, prefix='material')
+        if (form.is_valid() and invoice_service_form.is_valid() and invoice_material_form.is_valid()):
+            return self.form_valid(form, invoice_service_form, invoice_material_form)
         else:
-            return self.form_invalid(form, invoice_detail_form, invoice_material_form)
+            return self.form_invalid(form, invoice_service_form, invoice_material_form)
 
-    def form_valid(self, invoice_form, invoice_detail_form, invoice_material_form):
+    def form_valid(self, invoice_form, invoice_service_form, invoice_material_form):
         """
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
         success page.
         """
         self.object = invoice_form.save()
-        invoice_detail_form.instance = self.object
-        invoice_detail_form.save()
+        invoice_service_form.instance = self.object
+        invoice_service_form.save()
         invoice_material_form.instance = self.object
         invoice_material_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
-    def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
+    def form_invalid(self, invoice_form, invoice_service_form, invoice_material_form):
         """
         Called if a form is invalid. Re-renders the context data with the
         data-filled forms and errors.
         """
         return self.render_to_response(
             self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form,
+                                  invoice_service=invoice_service_form,
                                   invoice_material=invoice_material_form))
 
 class CreateInvoiceView(CreateView):
@@ -127,11 +126,11 @@ class CreateInvoiceView(CreateView):
         self.object = None
         form_class = self.get_form_class()
         invoice_form = self.get_form(form_class)
-        invoice_detail_form = invoice_detail_formset(prefix='service')
+        invoice_service_form = invoice_service_formset(prefix='service')
         invoice_material_form = invoice_material_formset(prefix='material')
         return self.render_to_response(
-            self.get_context_data(invoice=invoice_form,
-                                  invoice_detail=invoice_detail_form,
+            self.get_context_data(invoice_form=invoice_form,
+                                  invoice_service=invoice_service_form,
                                   invoice_material=invoice_material_form))
 
     def post(self, request, *args, **kwargs):
@@ -143,21 +142,25 @@ class CreateInvoiceView(CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        invoice_detail_form = invoice_detail_formset(self.request.POST)
-        if (form.is_valid() and invoice_detail_form.is_valid()):
-            return self.form_valid(form, invoice_detail_form, invoice_material)
+        invoice_service_form = invoice_service_formset(self.request.POST, prefix='service')
+        invoice_material_form = invoice_material_formset(self.request.POST, prefix='material')
+        if (form.is_valid() and invoice_service_form.is_valid() and invoice_material_form.is_valid()):
+            return self.form_valid(form, invoice_service_form, invoice_material_form)
         else:
-            return self.form_invalid(form, invoice_detail_form, invoice_material)
+            return self.form_invalid(form, invoice_service_form, invoice_material_form)
 
-    def form_valid(self, invoice_form, invoice_detail_form, invoice_material_form):
+    def form_valid(self, invoice_form, invoice_service_form, invoice_material_form):
         """
         Called if all forms are valid. Creates a Recipe instance along with
         associated Ingredients and Instructions and then redirects to a
         success page.
         """
         self.object = invoice_form.save()
-        invoice_detail_form.instance = self.object
-        invoice_detail_form.save()
+        print self.object
+        invoice_service_form.instance = self.object
+        invoice_service_form.save()
+        invoice_material_form.instance = self.object
+        invoice_material_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
     def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
@@ -314,6 +317,46 @@ class EventCreate(View):
             new_event.save()
             messages.success(request, 'Added new event ' + request.POST.get('name',''))
         return HttpResponseRedirect(action_url)
+
+class MaterialList(ListView):
+    title = 'Material List'
+    template_name = 'material_list.html'
+    model = Material
+    form_class = MaterialForm
+
+class MaterialCreate(SuccessMessageMixin, CreateView):
+    title = 'Material Create'
+    template_name = 'material_create.html'
+    model = Material
+    form_class = MaterialForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('material-list')
+
+class MaterialDelete(DeleteView):
+    title = 'Material Delete'
+    template_name = 'material_confirm_delete.html'
+    model = Material
+    success_url = reverse_lazy('material-list')
+    success_message = "Material was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MaterialDelete, self).delete(request, *args, **kwargs)
+
+class MaterialDetail(DetailView):
+    title = 'Material Detail'
+    template_name = 'material_detail.html'
+    model = Material
+    def get_context_data(self, **kwargs):
+        context = super(MaterialDetail, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+class MaterialEdit(UpdateView):
+    title = 'Material Edit'
+    template_name = 'material_edit.html'
+    model = Material
+    form_class = MaterialForm
 
 class TaxList(ListView):
     title = 'Tax List'

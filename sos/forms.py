@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Details, Material, Organization, Project, Service,  Tax
+from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service,  Tax
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 from django.forms.models import inlineformset_factory
@@ -17,23 +17,21 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ['id','name', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
 
-class InvoiceDetailForm(forms.ModelForm):
-    hour = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
-    service = forms.ModelChoiceField(queryset = Service.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
-
-
+class InvoiceServiceForm(forms.ModelForm):
+    hour = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
+    service = forms.ModelChoiceField(required =False, queryset = Service.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
 
     class Meta():
-        model = Invoice_Details
+        model = Service
         fields = ['service','hour',]
 
 class InvoiceMaterialForm(forms.ModelForm):
-    price = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
-    material = forms.ModelChoiceField(queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
+    item = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
+    material = forms.ModelChoiceField(required =False, queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
 
     class Meta():
-        model = Invoice_Details
-        fields = ['material','price',]
+        model = Material
+        fields = ['material','item',]
 
 class EventForm(forms.ModelForm):
     project = forms.ModelChoiceField(required =False, label='Project', queryset = Project.objects.all(), widget=forms.Select(attrs={'style':'width: 100%','class':'project-select', 'id':'project-select'}))
@@ -64,18 +62,29 @@ class TaxForm(forms.ModelForm):
         model = Tax
         fields = ['name','value']
 
+class MaterialForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'material-name', }))
+    tax = forms.ModelChoiceField(queryset = Tax.objects.all() , label='Tax', widget= forms.Select(attrs={'class': 'select','id':'material-tax', }))
+    group = forms.ModelChoiceField(queryset = Code.objects.all().filter(entity='MATERIAL', schema='GROUP') , label='Group', widget= forms.Select(attrs={'class': 'select','id':'material-group', }))
+    manufacturer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'MANU') , label='Manufacturer', widget= forms.Select(attrs={'class': 'select','id':'material-manufacturer', }))
+    dealer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'DEAL') , label='Dealer', widget= forms.Select(attrs={'class': 'select','id':'material-dealer', }))
+    price = forms.DecimalField(required =False, label='Price', widget= forms.NumberInput(attrs={'class': 'form-control','id':'material-price', }))
+    class Meta:
+        model = Material
+        fields = ['name','price','tax','group','manufacturer','dealer']
+
 class OrganizationForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))
-    street_name = forms.CharField(required =True, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-name', }))
-    street_number = forms.CharField(required =True, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-number', }))
-    zip_code = forms.CharField(required =True, label='Zip Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-zip-code', }))
-    city = forms.CharField(required =True, label='City', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-city', }))
-    country = forms.CharField(required =True, label='Country', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-country', }))
-    phone = forms.CharField(required =True, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-phone', }))
-    email = forms.CharField(required =True, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-email', }))
-    org_nbr_1 = forms.CharField(required =True, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-1', }))
-    org_nbr_2 = forms.CharField(required =True, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-2', }))
-    org_type = forms.ModelChoiceField(required =True, label='Code', widget= forms.Select(attrs={'class': 'form-control','id':'organization-code', }), queryset=Code.objects.all().filter(entity='ORGANIZATION') )
+    street_name = forms.CharField(required =False, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-name', }))
+    street_number = forms.CharField(required =False, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-number', }))
+    zip_code = forms.CharField(required =False, label='Zip Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-zip-code', }))
+    city = forms.CharField(required =False, label='City', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-city', }))
+    country = forms.CharField(required =False, label='Country', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-country', }))
+    phone = forms.CharField(required =False, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-phone', }))
+    email = forms.CharField(required =False, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-email', }))
+    org_nbr_1 = forms.CharField(required =False, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-1', }))
+    org_nbr_2 = forms.CharField(required =False, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-2', }))
+    org_type = forms.ModelChoiceField(required =False, label='Code', widget= forms.Select(attrs={'class': 'select','id':'organization-code', }), queryset=Code.objects.all().filter(entity='ORGANIZATION') )
     class Meta:
         model = Organization
         fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr_1','org_nbr_2','org_type']
@@ -98,5 +107,5 @@ class ServiceForm(forms.ModelForm):
         model = Service
         fields = ['name','tax','price_per_hour','fixed_price']
 
-invoice_detail_formset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceDetailForm, extra=1)
-invoice_material_formset = inlineformset_factory(Invoice, Invoice_Details, form=InvoiceMaterialForm, extra=1)
+invoice_service_formset = inlineformset_factory(Invoice, Invoice_Service, form=InvoiceServiceForm, extra=1, can_delete=True)
+invoice_material_formset = inlineformset_factory(Invoice, Invoice_Material, form=InvoiceMaterialForm, extra=1, can_delete=True)
