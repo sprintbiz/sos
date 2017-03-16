@@ -7,7 +7,7 @@
       "type": "CREA",
       "parrent": 0,
       "entity": "INVOICE",
-      "schema":"TYPE",
+      "schema":"STATUS",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
@@ -20,7 +20,7 @@
       "type": "PAID",
       "parrent": 0,
       "entity": "INVOICE",
-      "schema":"TYPE",
+      "schema":"STATUS",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }
@@ -112,6 +112,32 @@
       "parrent": 0,
       "entity": "MATERIAL",
       "schema":"GROUP",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 10,
+    "fields": {
+      "name": "Sale",
+      "type": "SALE",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "schema":"TYPE",
+      "created": "2017-03-01T00:00:00+00:00",
+      "updated": "2017-03-01T00:00:00+00:00"
+    }
+  },
+  {
+    "model": "sos.code",
+    "pk": 11,
+    "fields": {
+      "name": "Buy",
+      "type": "BUY",
+      "parrent": 0,
+      "entity": "INVOICE",
+      "schema":"TYPE",
       "created": "2017-03-01T00:00:00+00:00",
       "updated": "2017-03-01T00:00:00+00:00"
     }

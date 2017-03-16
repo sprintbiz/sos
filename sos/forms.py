@@ -1,14 +1,18 @@
 from django import forms
 from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service,  Tax
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
 from django.forms.models import inlineformset_factory
+from django.contrib.auth.forms import AuthenticationForm
 
 class InvoiceForm(forms.ModelForm):
     name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
+    type =  forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
-    status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
+    status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='STATUS'), widget= forms.Select(attrs={'class': 'select2' }))
     company = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Company'), widget=forms.Select(attrs={'class':'select2'}))
     customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Customer'), widget=forms.Select(attrs={'class':'select2'}))
     literal_value = forms.CharField(widget= forms.Textarea(attrs={'class': 'form-control',}))
@@ -106,6 +110,26 @@ class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ['name','tax','price_per_hour','fixed_price']
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Email', 'aria-describedby' : 'basic-addon1'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Password', 'aria-describedby' : 'basic-addon2'}))
+
+class UserForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+class PasswordChangeCustomForm(PasswordChangeForm):
+    def __init__(self, user, *args, **kwargs):
+        super(PasswordChangeCustomForm, self).__init__(user, *args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
 invoice_service_formset = inlineformset_factory(Invoice, Invoice_Service, form=InvoiceServiceForm, extra=1, can_delete=True)
 invoice_material_formset = inlineformset_factory(Invoice, Invoice_Material, form=InvoiceMaterialForm, extra=1, can_delete=True)

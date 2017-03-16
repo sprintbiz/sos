@@ -112,6 +112,34 @@
 				  <button class="btn-search"><i class="fa fa-search"></i></button>
 				</li>
 			  </ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown profile">
+						<a href="/html/pages/profile.html" class="dropdown-toggle"  data-toggle="dropdown">
+							<i class="fa fa-user" style="color:#29c75f; font-size: 2.5em;" aria-hidden="true"></i>
+							<div class="title">Profile</div>
+						</a>
+						<div class="dropdown-menu">
+							<div class="profile-info">
+								{% if user.is_authenticated %}
+								    <h4 class="username">{{ user.get_username }}</h4>
+								{% else %}
+								    <h4 class="username">Annonymuse</h4>
+								{% endif %}
+							</div>
+							<ul class="action">
+								{% if user.is_authenticated %}
+								<li><a href="{% url 'profile' %}">Profile</a></li>
+								<li><a href="#"><span class="badge badge-danger pull-right">5</span>My Inbox</a></li>
+								<li><a href="{% url 'profile-password-change' %}">Password Change</a></li>
+								<li><a href="{% url 'logout' %}">Logout</a></li>
+								{% else %}
+								<li><a href="{% url 'login' %}">Login</a></li>
+								{% endif %}
+
+							</ul>
+						</div>
+					</li>
+				</ul>
 			</div>
 		  </div>
 		</nav>

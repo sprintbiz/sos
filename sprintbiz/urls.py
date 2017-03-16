@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword
 admin.autodiscover()
+from sos.forms import LoginForm
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls import include, url
@@ -35,8 +36,11 @@ urlpatterns = [
     url(r'^event/edit/(?P<id>\w+)/$', EventEdit.as_view()),
     url(r'^calendar/json/event/$', CalendarResponce.as_view()),
     url(r'^json/daysnotfilled/$', JsonDaysNotFilled.as_view()),
-    url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^login/$', auth_views.login, {'template_name': 'login.html','authentication_form': LoginForm}, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': 'dashboard'}, name='logout'),
+    url(r'^profile/$', ProfileView.as_view(), name='profile'),
+    url(r'^profile/password/change/$', ProfileChangePassword.as_view(), name='profile-password-change'),
+    url(r'^profile/password/done/$', auth_views.password_change_done, name='password-change-done'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^material/$', MaterialList.as_view(), name='material-list'),

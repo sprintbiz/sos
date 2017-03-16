@@ -1,8 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm
+from sos.forms import invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
 from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Tax
+from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -11,7 +12,7 @@ from django.template import Context
 from cgi import escape
 from django.db.models import F,ExpressionWrapper,FloatField, Sum, Value as V, TextField
 from django.db.models.functions import Coalesce, Concat
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, update_session_auth_hash
 from django.contrib.messages.views import SuccessMessageMixin
 import json
 from django.http import JsonResponse
@@ -31,16 +32,18 @@ class RedirectView(View):
 
 
 class Dashboard(View):
-
     def get(self, request):
         if not request.user.is_authenticated:
-            return render(request, 'login_err.html')
+            return redirect('login')
         username = request.user.username
         params = {'username' : username}
         params["name"] = "Sprintbiz"
         return render(request, 'dashboard.html', params)
 
 class InvoiceListView(ListView):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
     model = Invoice      # shorthand for setting queryset = models.Car.objects.all()
     template_name = 'invoice.html'  # optional (the default is app_name/modelNameInLowerCase_list.html; which will look into your templates folder for that path and file)
     context_object_name = 'invoices'    #default is object_list as well as model's_verbose_name_list and/or model's_verbose_name_plural_list, if defined in the model's inner Meta class
@@ -515,3 +518,41 @@ class ServiceDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ServiceDetail, self).get_context_data(**kwargs)
         return context
+
+class ProfileView(View):
+    def get(self, request):
+        title ='Profile'
+        template = 'profile.html'
+        user = User.objects.get(id=request.user.id)
+        user_name = user.username
+        profile_form = UserForm(instance=user)
+        return render(request,template,{'title' : title, 'profile_form' : profile_form, 'user_name' : user_name})
+
+    def post(self, request, *args, **kwargs):
+        title ='Profile'
+        template = 'profile.html'
+        user = User.objects.get(id=request.user.id)
+        user_name = user.username
+        profile_form = UserForm(request.POST, instance=user)
+        if profile_form.is_valid():
+            profile_form.save()
+        return render(request,template,{'title' : title, 'profile_form' : profile_form, 'user_name' : user_name})
+
+class ProfileChangePassword(View):
+    def get(self, request, *args, **kwargs):
+        title ='Change Password'
+        template = 'profile_password_change.html'
+        password_form = PasswordChangeCustomForm(request.user)
+        return render(request, 'profile_password_change.html', {'password_form': password_form})
+
+    def post(self, request, *args, **kwargs):
+        title ='Change Password'
+        template = 'profile_password_change.html'
+        password_form = PasswordChangeCustomForm(request.user, data=request.POST)
+        if password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)
+            messages.success(request, 'Password was changed')
+            return redirect('profile')
+        else:
+            return render(request, 'profile_password_change.html', {'password_form': password_form})
