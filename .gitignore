@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Untracked folders:
+sprintbiz/wsgi.py
+sprintbiz/settings.py
+*.pyc
+*.pyo

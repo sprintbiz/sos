@@ -1,16 +1,16 @@
-"""
-WSGI config for sprintbiz project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
-"""
+activate_this = 'D:/sprintbiz/venv/Scripts/activate_this.py'
+exec(open(activate_this).read(),dict(__file__=activate_this))
 
 import os
-
+import sys
+import site
 from django.core.wsgi import get_wsgi_application
 
+site.addsitedir('D:\sprintbiz\venv\Lib\site-packages')
+
+sys.path.append('D:\sprintbiz\sprintbiz\sprintbiz')
+sys.path.append('D:\sprintbiz\sprintbiz')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'sprintbiz.settings'
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sprintbiz.settings")
 
 application = get_wsgi_application()
