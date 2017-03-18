@@ -128,7 +128,9 @@
 							</div>
 							<ul class="action">
 								{% if user.is_authenticated %}
-								<li><a href="{% url 'profile' %}">Add User</a></li>
+								{% if request.user.is_superuser %}
+								<li><a href="{% url 'profile-create' %}">Add User</a></li>
+								{% endif %}
 								<li><a href="{% url 'profile' %}">Profile</a></li>
 								<li><a href="#"><span class="badge badge-danger pull-right">5</span>My Inbox</a></li>
 								<li><a href="{% url 'profile-password-change' %}">Password Change</a></li>
