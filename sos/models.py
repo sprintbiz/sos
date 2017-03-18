@@ -198,3 +198,31 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('event_list', kwargs={'id': self.id})
+
+class Warehouse(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+
+    class Meta:
+        verbose_name = 'Warehouse'
+        verbose_name_plural = 'Warehouses'
+
+    def __unicode__(self):
+        return self.name
+
+class Material_Transactions(models.Model):
+    id = models.AutoField(primary_key=True)
+    transaction_time = models.DateTimeField(auto_now_add=True)
+    warehouse = models.ForeignKey(Warehouse)
+    invoice = models.ForeignKey(Invoice)
+    material = models.ForeignKey(Material)
+    units = models.DecimalField(max_digits=5, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Material Transaction'
+        verbose_name_plural = 'Material Transactions'
+
+    def __unicode__(self):
+        return self.name
