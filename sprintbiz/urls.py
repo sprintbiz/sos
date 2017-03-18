@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView
 admin.autodiscover()
 from sos.forms import LoginForm
 from django.contrib.auth import views as auth_views
@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'login.html','authentication_form': LoginForm}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'dashboard'}, name='logout'),
     url(r'^profile/$', ProfileView.as_view(), name='profile'),
+    url(r'^profile/create/$', ProfileCreateView.as_view(), name='profile-create'),
     url(r'^profile/password/change/$', ProfileChangePassword.as_view(), name='profile-password-change'),
     url(r'^profile/password/done/$', auth_views.password_change_done, name='password-change-done'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
