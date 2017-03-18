@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
+from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
 from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Tax
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
@@ -41,9 +41,6 @@ class Dashboard(View):
         return render(request, 'dashboard.html', params)
 
 class InvoiceListView(ListView):
-    def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect('login')
     model = Invoice      # shorthand for setting queryset = models.Car.objects.all()
     template_name = 'invoice.html'  # optional (the default is app_name/modelNameInLowerCase_list.html; which will look into your templates folder for that path and file)
     context_object_name = 'invoices'    #default is object_list as well as model's_verbose_name_list and/or model's_verbose_name_plural_list, if defined in the model's inner Meta class
@@ -519,6 +516,22 @@ class ServiceDetail(DetailView):
         context = super(ServiceDetail, self).get_context_data(**kwargs)
         return context
 
+class ProfileCreateView(View):
+    def get(self, request):
+        title ='Create User'
+        template = 'profile_create.html'
+        profile_create_form = CreateUserForm()
+        return render(request,template,{'title' : title, 'profile_form' : profile_create_form})
+
+    def post(self, request):
+        title ='Create User'
+        template = 'profile_create.html'
+        profile_create_form = CreateUserForm(request.POST)
+        if profile_create_form.is_valid():
+            profile_create_form.save()
+            messages.success(request, 'Profile for ' + request.POST.get("username", "") + ' created')
+        return render(request,template,{'title' : title, 'profile_form' : profile_create_form})
+
 class ProfileView(View):
     def get(self, request):
         title ='Profile'
@@ -536,7 +549,10 @@ class ProfileView(View):
         profile_form = UserForm(request.POST, instance=user)
         if profile_form.is_valid():
             profile_form.save()
-        return render(request,template,{'title' : title, 'profile_form' : profile_form, 'user_name' : user_name})
+            messages.success(request, 'Profile was changed')
+            return redirect('profile')
+        else:
+            return render(request,template,{'title' : title, 'profile_form' : profile_form, 'user_name' : user_name})
 
 class ProfileChangePassword(View):
     def get(self, request, *args, **kwargs):
