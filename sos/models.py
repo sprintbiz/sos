@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.db import models
 from django.core.urlresolvers import reverse
-
+from django.contrib.auth.models import User
 
 class Code(models.Model):
     id = models.AutoField(primary_key=True)
@@ -87,9 +87,22 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project-edit', kwargs={'pk': self.id})
 
+class Warehouse(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = 'Warehouse'
+        verbose_name_plural = 'Warehouses'
+
+    def __unicode__(self):
+        return self.name
+
 class Invoice (models.Model):
     id = models.AutoField(primary_key=True)
     type = models.ForeignKey(Code, related_name='invoice_type')
+    warehouse = models.ForeignKey(Warehouse)
     name = models.CharField(max_length=10)
     create_date = models.DateField()
     payment_date = models.DateField()
@@ -139,8 +152,8 @@ class Service (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
-    price_per_hour  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    fixed_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    price_per_hour  = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    fixed_price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -199,19 +212,9 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('event_list', kwargs={'id': self.id})
 
-class Warehouse(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=300)
-
-    class Meta:
-        verbose_name = 'Warehouse'
-        verbose_name_plural = 'Warehouses'
-
-    def __unicode__(self):
-        return self.name
-
 class Material_Transactions(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User)
     transaction_time = models.DateTimeField(auto_now_add=True)
     warehouse = models.ForeignKey(Warehouse)
     invoice = models.ForeignKey(Invoice)

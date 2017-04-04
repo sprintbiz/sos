@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
 from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
-from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Tax
+from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -50,14 +50,37 @@ class InvoicePrintView(View):
     def get(self, request, id):
         invoice_object = Invoice.objects.get(id=id)
         invoice_detail_object = Invoice_Service.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
-		                                                       ,price_per_hour=ExpressionWrapper(F('service__price_per_hour'), output_field=FloatField())
-															   ,value=ExpressionWrapper(F('service__price_per_hour') * F('hour'), output_field=FloatField())
-															   ,tax_value=ExpressionWrapper((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField())
+		                                                       ,price_per_hour=ExpressionWrapper( Coalesce(F('service__price_per_hour'), F('service__fixed_price') ), output_field=FloatField() )
+															   ,value=ExpressionWrapper(Coalesce(F('service__price_per_hour') * F('hour'), F('service__fixed_price') * F('hour')), output_field=FloatField())
+															   ,tax_value=ExpressionWrapper( Coalesce((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100), output_field=FloatField() )
                                                                ,tax_prct=F('service__tax__value')
-															   ,gross_value=ExpressionWrapper((F('service__price_per_hour') * F('hour'))+(F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField())
+															   ,gross_value=ExpressionWrapper(
+                                                                   Coalesce (
+                                                                       (F('service__price_per_hour') * F('hour'))+(F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100,
+                                                                       (F('service__fixed_price') * F('hour'))+(F('service__fixed_price') * F('hour'))*F('service__tax__value')/100
+                                                                   ), output_field=FloatField()
+                                                               )
 															   )
-        invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(total_tax=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, output_field=FloatField()),total_net=Sum(F('service__price_per_hour') * F('hour'), output_field=FloatField()),total_gross=Sum((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'), output_field=FloatField()))
-        #return render(request,'invoice_detail.html',{'invoices' : object})
+        invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(
+            total_tax=Sum(
+                Coalesce (
+                    (F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100,
+                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100
+                ), output_field=FloatField()
+            ),
+            total_net=Sum(
+                Coalesce (
+                    F('service__price_per_hour') * F('hour'),
+                    F('service__fixed_price') * F('hour')
+                ), output_field=FloatField()
+            ),
+            total_gross=Sum(
+                Coalesce (
+                    (F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'),
+                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100+F('service__fixed_price') * F('hour'), 
+                ), output_field=FloatField()
+            )
+        )
         return render(request,'invoice_print.html',{'invoice_object' : invoice_object,'invoice_detail_object' : invoice_detail_object, 'invoice_total' : invoice_total} )
 
 class InvoiceEditView(UpdateView):
@@ -156,11 +179,15 @@ class CreateInvoiceView(CreateView):
         success page.
         """
         self.object = invoice_form.save()
-        print self.object
-        invoice_service_form.instance = self.object
+        print self.request.POST.get('material')
         invoice_service_form.save()
         invoice_material_form.instance = self.object
-        invoice_material_form.save()
+        materials = invoice_material_form.save(commit=False)
+        if self.request.POST['type'] == '10':
+            warehouse = Warehouse.objects.get(pk=self.request.POST.get('warehouse'))
+            for material in materials:
+                transaction = Material_Transactions(user = self.request.user, warehouse = warehouse, material = material.material, units = 10)
+                transaction.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
     def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):

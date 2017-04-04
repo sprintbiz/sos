@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service,  Tax
+from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Warehouse, Tax
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
@@ -10,6 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm
 class InvoiceForm(forms.ModelForm):
     name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
     type =  forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
+    warehouse =  forms.ModelChoiceField(queryset=Warehouse.objects.all(), widget= forms.Select(attrs={'class': 'select2' }))
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='STATUS'), widget= forms.Select(attrs={'class': 'select2' }))
@@ -19,7 +20,7 @@ class InvoiceForm(forms.ModelForm):
     payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
         model = Invoice
-        fields = ['id','name', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
+        fields = ['id','name', 'type', 'warehouse', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
 
 class InvoiceServiceForm(forms.ModelForm):
     hour = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
@@ -95,7 +96,7 @@ class OrganizationForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))
-    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type = 1) , label='Customer', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
+    customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__type='CUST') , label='Customer', widget= forms.Select(attrs={'class': 'form-control','id':'project-customer', }))
     code = forms.CharField(required =True, label='Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-code', }))
     class Meta:
         model = Project
@@ -107,6 +108,18 @@ class ServiceForm(forms.ModelForm):
     tax = forms.ModelChoiceField(queryset = Tax.objects.all() , label='Tax', widget= forms.Select(attrs={'class': 'form-control','id':'service-tax', }))
     price_per_hour = forms.DecimalField(required =False, label='Price Per Hour', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-price-per-hour', }))
     fixed_price = forms.DecimalField(required =False, label='Fixed Price', widget= forms.TextInput(attrs={'class': 'form-control','id':'service-fixed-price', }))
+    def clean(self):
+        cleaned_data = super(ServiceForm, self).clean()
+        price_per_hour = cleaned_data.get("price_per_hour")
+        fixed_price = cleaned_data.get("fixed_price")
+        if price_per_hour and fixed_price:
+            raise forms.ValidationError(
+                {
+                    'price_per_hour': ["Only one price can be set"],
+                    'fixed_price': ["Only one price can be set"]
+                }
+            )
+        return cleaned_data
     class Meta:
         model = Service
         fields = ['name','tax','price_per_hour','fixed_price']
