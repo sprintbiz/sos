@@ -24,59 +24,69 @@
   {% endfor %}
 </div>
 {% endif %}
+
 <div class="row">
-  <div class="col-md-12">
-    <div class="card">
-    <div class="card-header">{{view.title}}
-    </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Street Name</th>
-                    <th>Street Number</th>
-                    <th>Zip Code</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Code</th>
-          		      <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-            	  {% if object_list %}
-            	   {% for organization in object_list %}
-                  <tr>
-                    <th scope="row"><a href="{% url 'organization-edit' organization.id %}">{{ organization.name }}</a></th>
-                    <td>{{ organization.street_name }}</td>
-                    <td>{{ organization.street_number }}</td>
-                    <td>{{ organization.zip_code }}</td>
-                    <td>{{ organization.city }}</td>
-                    <td>{{ organization.country }}</td>
-                    <td>{{ organization.phone }}</td>
-                    <td>{{ organization.email }}</td>
-                    <td>{{ organization.code }}</td>
-          		      <td><a href="{% url 'organization-delete' organization.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                    <td><a href="{% url 'organization-detail' organization.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
-                  </tr>
-          		 {% endfor %}
-          		{% else %}
+  <div class="col-xs-12">
+      <div class="card">
+        <div class="card-header">
+          {{view.title}}
+        </div>
+        <div class="card-body no-padding">
+          <table class="datatable table table-striped primary" cellspacing="0" width="100%">
+            <thead>
                 <tr>
-                  <td colspan="11">There are no organizations definied.</td>
+                  <th>Name</th>
+                  <th>Street Name</th>
+                  <th>Street Number</th>
+                  <th>Zip Code</th>
+                  <th>City</th>
+                  <th>Country</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Code</th>
+                  <th></th>
+                  <th></th>
                 </tr>
-              {% endif %}
-              </tbody>
-          	</table>
-          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'organization-create' %}'">Create New</button>
-          </div>
+            </thead>
+            <tbody>
+              {% for organization in object_list %}
+                <tr>
+                  <th scope="row"><a href="{% url 'organization-edit' organization.id %}">{{ organization.name }}</a></th>
+                  <td>{{ organization.street_name }}</td>
+                  <td>{{ organization.street_number }}</td>
+                  <td>{{ organization.zip_code }}</td>
+                  <td>{{ organization.city }}</td>
+                  <td>{{ organization.country }}</td>
+                  <td>{{ organization.phone }}</td>
+                  <td>{{ organization.email }}</td>
+                  <td>{{ organization.code }}</td>
+                  <td><a href="{% url 'organization-delete' organization.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                  <td><a href="{% url 'organization-detail' organization.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
+                </tr>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="card-body"><button type="button" class="btn btn-success" onclick="location.href='{% url 'material-group-create' %}'">Create New</button></div>
         </div>
       </div>
     </div>
-  </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.datatable').DataTable({
+  "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>',
+  "oLanguage": {
+    "sSearch": "",
+    "sLengthMenu": "_MENU_"
+  },
+  "initComplete": (settings, json) => {
+    $('div.dataTables_filter input').attr('placeholder', 'Search...');
+    // $(".dataTables_wrapper select").select2({
+    //   minimumResultsForSearch: Infinity
+    // });
+  }
+});
+  });
+</script>
 {% endblock %}
