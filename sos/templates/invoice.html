@@ -11,64 +11,60 @@
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-xs-12">
-    <div class="card">
-      <div class="card-header">
-        {{title}}
-      </div>
-      <div class="card-body no-padding">
-        <table class="datatable table table-striped primary" cellspacing="0" width="100%">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Type</th>
-              <th>Invoice NBR</th>
-              <th>Customer</th>
-              <th>Created On</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for field in invoices %}
-            <tr>
-              <td>{{ field.id}}</td>
-              <td>{{ field.type}}</td>
-              <td><a href="{% url 'invoice-edit' field.id %}" >{{ field.name}}</a></td>
-              <td>{{field.customer}}</td>
-              <td>{{field.create_date}}</td>
-              <td>{{field.status}}</td>
-              <td><a href="{% url 'invoice-print' field.id %}" ><i class="fa fa-print" style="color:#29c75f;" aria-hidden="true"></i></a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% if is_paginated %}
-        <div class="card-body">
-        <ul class="pagination">
-          {% if page_obj.has_previous %}
-            <li><a href="{% url 'invoice-list' %}{{ page_obj.previous_page_number }}/">&laquo;</a></li>
-          {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-          {% endif %}
-          {% for i in page_obj.paginator.page_range %}
-            {% if page_obj.number == i %}
-              <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-              <li><a href="{% url 'invoice-list' %}{{ i }}/">{{ i }}</a></li>
-            {% endif %}
-          {% endfor %}
-          {% if page_obj.has_next %}
-            <li><a href="{% url 'invoice-list' %}{{ page_obj.next_page_number }}/">&raquo;</a></li>
-          {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-          {% endif %}
-        </ul>
+      <div class="card">
+        <div class="card-header">
+          {{view.title}}
         </div>
-        {% endif %}
+        <div class="card-body no-padding">
+          <table class="datatable table table-striped primary" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Invoice NBR</th>
+                  <th>Customer</th>
+                  <th>Created On</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for field in object_list %}
+                <tr>
+                  <td>{{ field.id}}</td>
+                  <td>{{ field.type}}</td>
+                  <td><a href="{% url 'invoice-edit' field.id %}" >{{ field.name}}</a></td>
+                  <td>{{field.customer}}</td>
+                  <td>{{field.create_date}}</td>
+                  <td>{{field.status}}</td>
+                  <td><a href="{% url 'invoice-print' field.id %}" ><i class="fa fa-print" style="color:#29c75f;" aria-hidden="true"></i></a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="card-body"><button type="button" class="btn btn-success" onclick="location.href='{% url 'material-group-create' %}'">Create New</button></div>
+        </div>
       </div>
     </div>
-  </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.datatable').DataTable({
+  "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>',
+  "oLanguage": {
+    "sSearch": "",
+    "sLengthMenu": "_MENU_"
+  },
+  "initComplete": (settings, json) => {
+    $('div.dataTables_filter input').attr('placeholder', 'Search...');
+    // $(".dataTables_wrapper select").select2({
+    //   minimumResultsForSearch: Infinity
+    // });
+  }
+});
+  });
+</script>
 {% endblock %}
