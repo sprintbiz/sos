@@ -24,49 +24,59 @@
   {% endfor %}
 </div>
 {% endif %}
+
 <div class="row">
-  <div class="col-md-12">
-    <div class="card">
-    <div class="card-header">{{view.title}}
-    </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Tax</th>
-                    <th>Price Per Hour</th>
-                    <th>Fixeed Price</th>
-          		      <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-            	  {% if object_list %}
-            	   {% for service in object_list %}
-                  <tr>
-                    <th scope="row"><a href="{% url 'service-edit' service.id %}">{{ service.name }}</a></th>
-                    <td>{{ service.tax }}</td>
-                    <td>{{ service.price_per_hour }}</td>
-                    <td>{{ service.fixed_price }}</td>
-          		      <td><a href="{% url 'service-delete' service.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                    <td><a href="{% url 'service-detail' service.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
-                  </tr>
-          		 {% endfor %}
-          		{% else %}
+  <div class="col-xs-12">
+      <div class="card">
+        <div class="card-header">
+          {{view.title}}
+        </div>
+        <div class="card-body no-padding">
+          <table class="datatable table table-striped primary" cellspacing="0" width="100%">
+            <thead>
                 <tr>
-                  <td colspan="6">There are no services definied.</td>
+                  <th>Name</th>
+                  <th>Tax</th>
+                  <th>Price Per Hour</th>
+                  <th>Fixeed Price</th>
+                  <th></th>
+                  <th></th>
                 </tr>
-              {% endif %}
-              </tbody>
-          	</table>
-          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'service-create' %}'">Create New</button>
-          </div>
+            </thead>
+            <tbody>
+              {% for service in object_list %}
+                <tr>
+                  <th scope="row"><a href="{% url 'service-edit' service.id %}">{{ service.name }}</a></th>
+                  <td>{{ service.tax }}</td>
+                  <td>{{ service.price_per_hour }}</td>
+                  <td>{{ service.fixed_price }}</td>
+                  <td><a href="{% url 'service-delete' service.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                  <td><a href="{% url 'service-detail' service.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
+                </tr>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="card-body"><button type="button" class="btn btn-success" onclick="location.href='{% url 'material-group-create' %}'">Create New</button></div>
         </div>
       </div>
     </div>
-  </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.datatable').DataTable({
+  "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>',
+  "oLanguage": {
+    "sSearch": "",
+    "sLengthMenu": "_MENU_"
+  },
+  "initComplete": (settings, json) => {
+    $('div.dataTables_filter input').attr('placeholder', 'Search...');
+    // $(".dataTables_wrapper select").select2({
+    //   minimumResultsForSearch: Infinity
+    // });
+  }
+});
+  });
+</script>
 {% endblock %}
