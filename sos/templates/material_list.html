@@ -24,54 +24,61 @@
   {% endfor %}
 </div>
 {% endif %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-    <div class="card-header">{{view.title}}
-    </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-6">
 
-            	  {% if object_list %}
-            	   {% for material in object_list %}
-                 <table class="table">
-                   {% if forloop.first %}
-                     <thead>
-                       <tr>
-                         <th>Name</th>
-                         <th>Price</th>
-                         <th>Tax</th>
-                         <th>Group</th>
-                         <th>Manufacturer</th>
-                         <th></th>
-                         <th></th>
-                       </tr>
-                     </thead>
-                     {% endif %}
-                     <tbody>
-                  <tr>
-                    <th scope="row"><a href="{% url 'material-edit' material.id %}">{{ material.name }}</a></th>
-                    <td>{{ material.price }}</td>
-                    <td>{{ material.tax }}</td>
-                    <td>{{ material.group }}</td>
-                    <td>{{ material.manufacturer }}</td>
-          		      <td><a href="{% url 'material-delete' material.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                    <td><a href="{% url 'material-detail' material.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
-                  </tr>
-          		 {% endfor %}
-          		{% else %}
+<div class="row">
+  <div class="col-xs-12">
+      <div class="card">
+        <div class="card-header">
+          {{view.title}}
+        </div>
+        <div class="card-body no-padding">
+          <table class="datatable table table-striped primary" cellspacing="0" width="100%">
+            <thead>
                 <tr>
-                  <td colspan="5">There are no materials definied.</td>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Tax</th>
+                  <th>Group</th>
+                  <th>Manufacturer</th>
+                  <th></th>
+                  <th></th>
                 </tr>
-              {% endif %}
-              </tbody>
-          	</table>
-          	<button type="button" class="btn btn-success" onclick="location.href='{% url 'material-create' %}'">Create New</button>
-          </div>
+            </thead>
+            <tbody>
+              {% for material in object_list %}
+                <tr>
+                  <th scope="row"><a href="{% url 'material-edit' material.id %}">{{ material.name }}</a></th>
+                  <td>{{ material.price }}</td>
+                  <td>{{ material.tax }}</td>
+                  <td>{{ material.group }}</td>
+                  <td>{{ material.manufacturer }}</td>
+                  <td><a href="{% url 'material-delete' material.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                  <td><a href="{% url 'material-detail' material.id %}"><i class="fa fa-info" aria-hidden="true"></i></a></td>
+                </tr>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="card-body"><button type="button" class="btn btn-success" onclick="location.href='{% url 'material-group-create' %}'">Create New</button></div>
         </div>
       </div>
     </div>
-  </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.datatable').DataTable({
+  "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>',
+  "oLanguage": {
+    "sSearch": "",
+    "sLengthMenu": "_MENU_"
+  },
+  "initComplete": (settings, json) => {
+    $('div.dataTables_filter input').attr('placeholder', 'Search...');
+    // $(".dataTables_wrapper select").select2({
+    //   minimumResultsForSearch: Infinity
+    // });
+  }
+});
+  });
+</script>
 {% endblock %}
