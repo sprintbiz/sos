@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Organization, Project, Service, Warehouse, Tax
+from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Organization, Project, Service, Warehouse, Tax
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
@@ -10,7 +10,6 @@ from django.contrib.auth.forms import AuthenticationForm
 class InvoiceForm(forms.ModelForm):
     name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
     type =  forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
-    warehouse =  forms.ModelChoiceField(queryset=Warehouse.objects.all(), widget= forms.Select(attrs={'class': 'select2' }))
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='STATUS'), widget= forms.Select(attrs={'class': 'select2' }))
@@ -20,7 +19,7 @@ class InvoiceForm(forms.ModelForm):
     payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
         model = Invoice
-        fields = ['id','name', 'type', 'warehouse', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
+        fields = ['id','name', 'type', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
 
 class InvoiceServiceForm(forms.ModelForm):
     hour = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
@@ -32,11 +31,11 @@ class InvoiceServiceForm(forms.ModelForm):
 
 class InvoiceMaterialForm(forms.ModelForm):
     item = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
-    material = forms.ModelChoiceField(required =False, queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
-
+    material = forms.ModelChoiceField(queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}), required =False)
+    warehouse =  forms.ModelChoiceField(queryset=Warehouse.objects.all(), widget= forms.Select(attrs={'class': 'select2' }), required=False)
     class Meta():
         model = Material
-        fields = ['material','item',]
+        fields = ['material','item', 'warehouse',]
 
 class EventForm(forms.ModelForm):
     project = forms.ModelChoiceField(required =False, label='Project', queryset = Project.objects.all(), widget=forms.Select(attrs={'style':'width: 100%','class':'project-select', 'id':'project-select'}))
@@ -70,13 +69,20 @@ class TaxForm(forms.ModelForm):
 class MaterialForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'material-name', }))
     tax = forms.ModelChoiceField(queryset = Tax.objects.all() , label='Tax', widget= forms.Select(attrs={'class': 'select','id':'material-tax', }))
-    group = forms.ModelChoiceField(queryset = Code.objects.all().filter(entity='MATERIAL', schema='GROUP') , label='Group', widget= forms.Select(attrs={'class': 'select','id':'material-group', }))
+    group = forms.ModelChoiceField(queryset = Material_Group.objects.all().exclude(parrent__isnull=True) , label='Group', widget= forms.Select(attrs={'class': 'select','id':'material-group', }))
     manufacturer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'MANU') , label='Manufacturer', widget= forms.Select(attrs={'class': 'select','id':'material-manufacturer', }))
     dealer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'DEAL') , label='Dealer', widget= forms.Select(attrs={'class': 'select','id':'material-dealer', }))
     price = forms.DecimalField(required =False, label='Price', widget= forms.NumberInput(attrs={'class': 'form-control','id':'material-price', }))
     class Meta:
         model = Material
         fields = ['name','price','tax','group','manufacturer','dealer']
+
+class MaterialGroupForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'material-group-name', }))
+    parrent = forms.ModelChoiceField(required =False, queryset = Material_Group.objects.order_by('name').distinct(), label='Parrent', widget= forms.Select(attrs={'class': 'select','id':'material-group-parrent', }))
+    class Meta:
+        model = Material_Group
+        fields = ['name','parrent']
 
 class OrganizationForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))

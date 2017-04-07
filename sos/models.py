@@ -102,7 +102,6 @@ class Warehouse(models.Model):
 class Invoice (models.Model):
     id = models.AutoField(primary_key=True)
     type = models.ForeignKey(Code, related_name='invoice_type')
-    warehouse = models.ForeignKey(Warehouse)
     name = models.CharField(max_length=10)
     create_date = models.DateField()
     payment_date = models.DateField()
@@ -126,12 +125,29 @@ class Invoice (models.Model):
 
     def __int__(self):
         return self.id
+        
+class Material_Group (models.Model):
+    id = models.AutoField(primary_key=True)
+    parrent = models.ForeignKey('self', blank=True, null=True)
+    name = models.CharField(max_length=60)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Material Group'
+        verbose_name_plural = 'Material Groups'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('material-group-edit', kwargs={'pk': self.id})
 
 class Material (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
-    group = models.ForeignKey(Code)
+    group = models.ForeignKey(Material_Group)
     manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer', blank=True, null=True)
     dealer = models.ForeignKey(Organization, related_name='organization_dealer', blank=True, null=True)
     price  = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True)
@@ -183,6 +199,7 @@ class Invoice_Material (models.Model):
     id = models.AutoField(primary_key=True)
     invoice = models.ForeignKey(Invoice)
     material = models.ForeignKey(Material)
+    warehouse = models.ForeignKey(Warehouse, blank=True, null=True)
     item  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

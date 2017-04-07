@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
-from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Transactions, Organization, Project, Service, Tax, Warehouse
+from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, MaterialGroupForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
+from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -24,6 +24,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 import datetime
 from django.utils import timezone
+from django.db import connection
 
 
 class RedirectView(View):
@@ -36,8 +37,11 @@ class Dashboard(View):
         if not request.user.is_authenticated:
             return redirect('login')
         username = request.user.username
+        truncate_month = connection.ops.date_trunc_sql('month','transaction_time')
         params = {'username' : username}
         params["name"] = "Sprintbiz"
+        params["transactions"] = Material_Transactions.objects.extra({'transaction_month': truncate_month}).values('transaction_month','material__name').annotate(total_units = Sum('units'))
+
         return render(request, 'dashboard.html', params)
 
 class InvoiceListView(ListView):
@@ -77,7 +81,7 @@ class InvoicePrintView(View):
             total_gross=Sum(
                 Coalesce (
                     (F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'),
-                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100+F('service__fixed_price') * F('hour'), 
+                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100+F('service__fixed_price') * F('hour'),
                 ), output_field=FloatField()
             )
         )
@@ -178,16 +182,15 @@ class CreateInvoiceView(CreateView):
         associated Ingredients and Instructions and then redirects to a
         success page.
         """
-        self.object = invoice_form.save()
-        print self.request.POST.get('material')
+        pk = invoice_form.save()
+        self.object = pk
         invoice_service_form.save()
         invoice_material_form.instance = self.object
         materials = invoice_material_form.save(commit=False)
-        if self.request.POST['type'] == '10':
-            warehouse = Warehouse.objects.get(pk=self.request.POST.get('warehouse'))
-            for material in materials:
-                transaction = Material_Transactions(user = self.request.user, warehouse = warehouse, material = material.material, units = 10)
-                transaction.save()
+        for material in materials:
+            transaction = Material_Transactions(user = self.request.user ,warehouse = material.warehouse, material = material.material, units = material.item, invoice = pk)
+            transaction.save()
+        invoice_material_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
     def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
@@ -384,6 +387,46 @@ class MaterialEdit(UpdateView):
     template_name = 'material_edit.html'
     model = Material
     form_class = MaterialForm
+
+class MaterialGroupList(ListView):
+    title = 'Material Group List'
+    template_name = 'material_group_list.html'
+    model = Material_Group
+    form_class = MaterialGroupForm
+
+class MaterialGroupCreate(SuccessMessageMixin, CreateView):
+    title = 'Material Group Create'
+    template_name = 'material_group_create.html'
+    model = Material_Group
+    form_class = MaterialGroupForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('material-group-list')
+
+class MaterialGroupDelete(DeleteView):
+    title = 'Material Group Delete'
+    template_name = 'material_group_confirm_delete.html'
+    model = Material_Group
+    success_url = reverse_lazy('material-group-list')
+    success_message = "Material Group was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MaterialGroupDelete, self).delete(request, *args, **kwargs)
+
+class MaterialGroupDetail(DetailView):
+    title = 'Material Group Detail'
+    template_name = 'material_group_detail.html'
+    model = Material_Group
+    def get_context_data(self, **kwargs):
+        context = super(MaterialGroupDetail, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+class MaterialGroupEdit(UpdateView):
+    title = 'Material Group Edit'
+    template_name = 'material_group_edit.html'
+    model = Material_Group
+    form_class = MaterialGroupForm
 
 class TaxList(ListView):
     title = 'Tax List'
