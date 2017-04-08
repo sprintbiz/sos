@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from datetime import datetime
 
 class Code(models.Model):
     id = models.AutoField(primary_key=True)
@@ -116,16 +117,14 @@ class Invoice (models.Model):
 
     def get_absolute_url(self):
         return reverse('invoice', args=[str(self.id),str(self.name)])
+
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoices'
 
     def __unicode__(self):
-        return unicode(self.id) or u''
+        return self.name
 
-    def __int__(self):
-        return self.id
-        
 class Material_Group (models.Model):
     id = models.AutoField(primary_key=True)
     parrent = models.ForeignKey('self', blank=True, null=True)
@@ -232,7 +231,7 @@ class Event(models.Model):
 class Material_Transactions(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User)
-    transaction_time = models.DateTimeField(auto_now_add=True)
+    transaction_time = models.DateTimeField(default=datetime.now)
     warehouse = models.ForeignKey(Warehouse)
     invoice = models.ForeignKey(Invoice)
     material = models.ForeignKey(Material)
