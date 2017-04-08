@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Organization, Project, Service, Warehouse, Tax
+from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
@@ -83,6 +83,17 @@ class MaterialGroupForm(forms.ModelForm):
     class Meta:
         model = Material_Group
         fields = ['name','parrent']
+
+class MaterialTransactionForm(forms.ModelForm):
+    transaction_time = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control','id':'transaction-time', }), label='Transaction Time', )
+    user = forms.CharField(label='User', widget= forms.TextInput(attrs={'class': 'form-control','id':'user', }))
+    warehouse = forms.ModelChoiceField(queryset = Warehouse.objects.all(), label='Warehouse', widget= forms.Select(attrs={'class': 'select','id':'warehouse', }))
+    invoice = forms.ModelChoiceField(queryset = Invoice.objects.all(), label='Invoice', widget= forms.Select(attrs={'class': 'select','id':'invoice', }))
+    material = forms.ModelChoiceField(queryset = Material.objects.all(), label='Material', widget= forms.Select(attrs={'class': 'select','id':'material', }))
+    units = forms.DecimalField(label='Units', widget= forms.NumberInput(attrs={'class': 'form-control','id':'units', }))
+    class Meta:
+        model = Material_Transactions
+        fields = ['user','warehouse','invoice','material','units']
 
 class OrganizationForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))
