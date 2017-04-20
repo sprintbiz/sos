@@ -86,14 +86,13 @@ class MaterialGroupForm(forms.ModelForm):
 
 class MaterialTransactionForm(forms.ModelForm):
     transaction_time = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control','id':'transaction-time', }), label='Transaction Time', )
-    user = forms.CharField(label='User', widget= forms.TextInput(attrs={'class': 'form-control','id':'user', }))
     warehouse = forms.ModelChoiceField(queryset = Warehouse.objects.all(), label='Warehouse', widget= forms.Select(attrs={'class': 'select','id':'warehouse', }))
     invoice = forms.ModelChoiceField(queryset = Invoice.objects.all(), label='Invoice', widget= forms.Select(attrs={'class': 'select','id':'invoice', }))
     material = forms.ModelChoiceField(queryset = Material.objects.all(), label='Material', widget= forms.Select(attrs={'class': 'select','id':'material', }))
     units = forms.DecimalField(label='Units', widget= forms.NumberInput(attrs={'class': 'form-control','id':'units', }))
     class Meta:
         model = Material_Transactions
-        fields = ['user','warehouse','invoice','material','units']
+        fields = ['warehouse','invoice','material','units','transaction_time']
 
 class OrganizationForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))

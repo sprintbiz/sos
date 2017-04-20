@@ -245,3 +245,6 @@ class Material_Transactions(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('material-transaction-edit', kwargs={'pk': self.id})
