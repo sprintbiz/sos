@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, MaterialTransactionDelete, MaterialTransactionEdit, MaterialTransactionList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView
 admin.autodiscover()
 from sos.forms import LoginForm
 from django.contrib.auth import views as auth_views
@@ -54,6 +54,9 @@ urlpatterns = [
     url(r'^material_group/edit/(?P<pk>\w+)/$', MaterialGroupEdit.as_view(), name='material-group-edit'),
     url(r'^material_group/delete/(?P<pk>\w+)/$', MaterialGroupDelete.as_view(), name='material-group-delete'),
     url(r'^material_group/detail/(?P<pk>\w+)/$', MaterialGroupDetail.as_view(), name='material-group-detail'),
+    url(r'^material_transaction/$', MaterialTransactionList.as_view(), name='material-transaction-list'),
+    url(r'^material_transaction/delete/(?P<pk>\w+)/$', MaterialTransactionDelete.as_view(), name='material-transaction-delete'),
+    url(r'^material_transaction/edit/(?P<pk>\w+)/$', MaterialTransactionEdit.as_view(), name='material-transaction-edit'),
     url(r'^organization/$', OrganizationList.as_view(), name='organization-list'),
     url(r'^organization/create/$', OrganizationCreate.as_view(), name='organization-create'),
     url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),

@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, MaterialGroupForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
+from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
 from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
@@ -45,10 +45,10 @@ class Dashboard(View):
         return render(request, 'dashboard.html', params)
 
 class InvoiceListView(ListView):
+    title = 'Invoice List';
     model = Invoice      # shorthand for setting queryset = models.Car.objects.all()
     template_name = 'invoice.html'  # optional (the default is app_name/modelNameInLowerCase_list.html; which will look into your templates folder for that path and file)
     context_object_name = 'invoices'    #default is object_list as well as model's_verbose_name_list and/or model's_verbose_name_plural_list, if defined in the model's inner Meta class
-    paginate_by = 10  #and that's it !!
 
 class InvoicePrintView(View):
     def get(self, request, id):
@@ -427,6 +427,28 @@ class MaterialGroupEdit(UpdateView):
     template_name = 'material_group_edit.html'
     model = Material_Group
     form_class = MaterialGroupForm
+
+class MaterialTransactionDelete(DeleteView):
+    title = 'Material Transaction Delete'
+    template_name = 'material_transaction_confirm_delete.html'
+    model = Material_Transactions
+    success_url = reverse_lazy('material-transaction-list')
+    success_message = "Material Transaction was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MaterialTransactionDelete, self).delete(request, *args, **kwargs)
+
+class MaterialTransactionList(ListView):
+    title = 'Material Transaction List'
+    template_name = 'material_transaction_list.html'
+    model = Material_Transactions
+    form_class = MaterialTransactionForm
+
+class MaterialTransactionEdit(UpdateView):
+    title = 'Material Transaction Edit'
+    template_name = 'material_transaction_edit.html'
+    model = Material_Transactions
+    form_class = MaterialTransactionForm
 
 class TaxList(ListView):
     title = 'Tax List'
