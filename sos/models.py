@@ -166,7 +166,7 @@ class Material (models.Model):
 class Service (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=200)
     price_per_hour  = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     fixed_price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
