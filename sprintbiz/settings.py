@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'sprintbiz.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dsbsos_dev',
+        'NAME': 'dsbsos',
         'USER': 'root',
         'PASSWORD': 'oracle',
     }
