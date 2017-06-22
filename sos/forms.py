@@ -1,5 +1,5 @@
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax
+from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax, Unit
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
@@ -68,14 +68,21 @@ class TaxForm(forms.ModelForm):
 
 class MaterialForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'material-name', }))
+    unit = forms.ModelChoiceField(queryset = Unit.objects.all() , label='Unit', widget= forms.Select(attrs={'class': 'select','id':'material-unit', }))
     tax = forms.ModelChoiceField(queryset = Tax.objects.all() , label='Tax', widget= forms.Select(attrs={'class': 'select','id':'material-tax', }))
     group = forms.ModelChoiceField(queryset = Material_Group.objects.all().exclude(parrent__isnull=True) , label='Group', widget= forms.Select(attrs={'class': 'select','id':'material-group', }))
-    manufacturer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'MANU') , label='Manufacturer', widget= forms.Select(attrs={'class': 'select','id':'material-manufacturer', }))
-    dealer = forms.ModelChoiceField(queryset = Organization.objects.filter(org_type__type = 'DEAL') , label='Dealer', widget= forms.Select(attrs={'class': 'select','id':'material-dealer', }))
+    manufacturer = forms.ModelChoiceField(required =False, queryset = Manufacturer.objects.all() , label='Manufacturer', widget= forms.Select(attrs={'class': 'select','id':'material-manufacturer', }))
+    dealer = forms.ModelChoiceField(required =False, queryset = Organization.objects.filter(org_type__type = 'DEAL') , label='Dealer', widget= forms.Select(attrs={'class': 'select','id':'material-dealer', }))
     price = forms.DecimalField(required =False, label='Price', widget= forms.NumberInput(attrs={'class': 'form-control','id':'material-price', }))
     class Meta:
         model = Material
-        fields = ['name','price','tax','group','manufacturer','dealer']
+        fields = ['name','unit', 'price','tax','group','manufacturer','dealer']
+
+class ManufacturerForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'manufacturer-name', }))
+    class Meta:
+        model = Manufacturer
+        fields = ['name']
 
 class MaterialGroupForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'material-group-name', }))
@@ -95,6 +102,11 @@ class MaterialTransactionForm(forms.ModelForm):
         fields = ['warehouse','invoice','material','units','transaction_time']
 
 class OrganizationForm(forms.ModelForm):
+    OPTIONS = (
+                (1, "Yes"),
+                (0, "No"),
+                (-1, "N/A"),
+                )
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))
     street_name = forms.CharField(required =False, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-name', }))
     street_number = forms.CharField(required =False, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-number', }))
@@ -106,9 +118,13 @@ class OrganizationForm(forms.ModelForm):
     org_nbr_1 = forms.CharField(required =False, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-1', }))
     org_nbr_2 = forms.CharField(required =False, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-org-nbr-2', }))
     org_type = forms.ModelChoiceField(required =False, label='Code', widget= forms.Select(attrs={'class': 'select','id':'organization-code', }), queryset=Code.objects.all().filter(entity='ORGANIZATION') )
+    is_owner =  forms.NullBooleanField(required =False, widget= forms.CheckboxInput(attrs={'class': 'checkbox','id':'is_owner', }))
+    is_customer = forms.NullBooleanField(required =False, widget= forms.CheckboxInput(attrs={'class': 'checkbox'}))
+    is_dealer = forms.NullBooleanField(required =False, widget= forms.CheckboxInput(attrs={'class': 'checkbox','id':'is_dealer', }))
+    is_manufacturer = forms.NullBooleanField(required =False, widget= forms.CheckboxInput(attrs={'class': 'checkbox','id':'is_manufacturer', }))
     class Meta:
         model = Organization
-        fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr_1','org_nbr_2','org_type']
+        fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr_1','org_nbr_2','org_type','is_owner','is_customer','is_dealer','is_manufacturer']
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))

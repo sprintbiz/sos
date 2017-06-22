@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
-from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
+from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
+from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -182,15 +182,17 @@ class CreateInvoiceView(CreateView):
         associated Ingredients and Instructions and then redirects to a
         success page.
         """
-        pk = invoice_form.save()
-        self.object = pk
-        invoice_service_form.save()
+        id = invoice_form.save()
+        self.object = id
+        
         invoice_material_form.instance = self.object
         materials = invoice_material_form.save(commit=False)
         for material in materials:
-            transaction = Material_Transactions(user = self.request.user ,warehouse = material.warehouse, material = material.material, units = material.item, invoice = pk)
+            transaction = Material_Transactions(user = self.request.user ,warehouse = material.warehouse, material = material.material, units = material.item, invoice = id)
             transaction.save()
         invoice_material_form.save()
+        invoice_service_form.instance = self.object
+        invoice_service_form.save()
         return HttpResponseRedirect(reverse('invoice-list'))
 
     def form_invalid(self, invoice_form, invoice_detail_form, invoice_material_form):
@@ -347,6 +349,21 @@ class EventCreate(View):
             new_event.save()
             messages.success(request, 'Added new event ' + request.POST.get('name',''))
         return HttpResponseRedirect(action_url)
+
+class ManufacturerList(ListView):
+    title = 'Manufacturer List'
+    template_name = 'manufacturer_list.html'
+    model = Manufacturer
+    form_class = ManufacturerForm
+
+class ManufacturerCreate(SuccessMessageMixin, CreateView):
+    title = 'Manufacturer Create'
+    template_name = 'manufacturer_create.html'
+    model = Manufacturer
+    form_class = ManufacturerForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('manufacturer-list')
 
 class MaterialList(ListView):
     title = 'Material List'

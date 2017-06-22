@@ -46,17 +46,22 @@ class Tax (models.Model):
 class Organization (models.Model):
 
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    street_name = models.CharField(max_length=60, blank=True)
+    name = models.CharField(max_length=200)
+    street_name = models.CharField(max_length=200, blank=True)
     street_number = models.CharField(max_length=10, blank=True)
     zip_code = models.CharField(max_length=60, blank=True)
-    city = models.CharField(max_length=60, blank=True)
-    country = models.CharField(max_length=60, blank=True)
+    city = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
     phone = models.CharField(max_length=15, blank=True)
-    email = models.CharField(max_length=60, blank=True)
+    email = models.CharField(max_length=200, blank=True)
     org_nbr_1 = models.CharField(max_length=30, blank=True)
     org_nbr_2 = models.CharField(max_length=30, blank=True)
     org_type = models.ForeignKey(Code)
+    bank_account = models.CharField(max_length=40, blank=True)
+    is_owner = models.NullBooleanField()
+    is_customer = models.NullBooleanField()
+    is_dealer = models.NullBooleanField()
+    is_manufacturer = models.NullBooleanField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -87,6 +92,19 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return reverse('project-edit', kwargs={'pk': self.id})
+
+class Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    code = models.CharField(max_length=300)
+    name = models.CharField(max_length=300)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = 'Unit'
+        verbose_name_plural = 'Units'
+
+    def __unicode__(self):
+        return self.name
 
 class Warehouse(models.Model):
     id = models.AutoField(primary_key=True)
@@ -142,12 +160,29 @@ class Material_Group (models.Model):
     def get_absolute_url(self):
         return reverse('material-group-edit', kwargs={'pk': self.id})
 
+class Manufacturer (models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=60)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Manufacturer'
+        verbose_name_plural = 'Manufacturers'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('manufacturer-edit', kwargs={'pk': self.id})
+
 class Material (models.Model):
     id = models.AutoField(primary_key=True)
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
+    unit = models.ForeignKey(Unit)
     group = models.ForeignKey(Material_Group)
-    manufacturer = models.ForeignKey(Organization, related_name='organization_manufacturer', blank=True, null=True)
+    manufacturer = models.ForeignKey(Manufacturer)
     dealer = models.ForeignKey(Organization, related_name='organization_dealer', blank=True, null=True)
     price  = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
