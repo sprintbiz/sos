@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, MaterialTransactionDelete, MaterialTransactionEdit, MaterialTransactionList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView
+from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, ManufacturerList, ManufacturerCreate, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, MaterialTransactionDelete, MaterialTransactionEdit, MaterialTransactionList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView
 admin.autodiscover()
 from sos.forms import LoginForm
 from django.contrib.auth import views as auth_views
@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^invoice/$', InvoiceListView.as_view(), name='invoice-list'),
     url(r'^invoice/(?P<pk>\d+)/edit/$', InvoiceEditView.as_view(), name='invoice-edit'),
     url(r'^invoice/([0-9]+)/print/$', InvoicePrintView.as_view(), name='invoice-print'),
-	url(r'^invoice/new/$', CreateInvoiceView.as_view()),
+	url(r'^invoice/new/$', CreateInvoiceView.as_view(), name='invoice-create'),
     url(r'^invoice/new/save/$', CreateInvoiceView.as_view()),
     url(r'^calendar/$', TimescheetView.as_view()),
     url(r'^event/$', EventList.as_view() , name='event_list'),
@@ -44,6 +44,8 @@ urlpatterns = [
     url(r'^profile/password/done/$', auth_views.password_change_done, name='password-change-done'),
     url(r'^calendar/json/project/$', JsonProject.as_view()),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^manufacturer/$', ManufacturerList.as_view(), name='manufacturer-list'),
+    url(r'^manufacturer/create/$', ManufacturerCreate.as_view(), name='manufacturer-create'),
     url(r'^material/$', MaterialList.as_view(), name='material-list'),
     url(r'^material/create/$', MaterialCreate.as_view(), name='material-create'),
     url(r'^material/edit/(?P<pk>\w+)/$', MaterialEdit.as_view(), name='material-edit'),
