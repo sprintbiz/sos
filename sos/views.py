@@ -25,7 +25,7 @@ from django.urls import reverse_lazy
 import datetime
 from django.utils import timezone
 from django.db import connection
-
+from itertools import chain
 
 class RedirectView(View):
     def get(self, request):
@@ -53,7 +53,7 @@ class InvoiceListView(ListView):
 class InvoicePrintView(View):
     def get(self, request, id):
         invoice_object = Invoice.objects.get(id=id)
-        invoice_detail_object = Invoice_Service.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
+        invoicem_service = Invoice_Service.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
 		                                                       ,price_per_hour=ExpressionWrapper( Coalesce(F('service__price_per_hour'), F('service__fixed_price') ), output_field=FloatField() )
 															   ,value=ExpressionWrapper(Coalesce(F('service__price_per_hour') * F('hour'), F('service__fixed_price') * F('hour')), output_field=FloatField())
 															   ,tax_value=ExpressionWrapper( Coalesce((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100), output_field=FloatField() )
@@ -65,6 +65,15 @@ class InvoicePrintView(View):
                                                                    ), output_field=FloatField()
                                                                )
 															   )
+        invoicem_material = Invoice_Material.objects.filter(invoice_id=id).annotate(service_name=F('material__name')
+		                                                       ,price_per_hour=ExpressionWrapper( F('material__price'), output_field=FloatField() )
+															   ,value=ExpressionWrapper(F('material__price') * F('item'), output_field=FloatField())
+															   ,tax_value=ExpressionWrapper( (F('material__price') * F('item'))*F('material__tax__value')/100, output_field=FloatField() )
+                                                               ,tax_prct=F('material__tax__value')
+															   ,gross_value=ExpressionWrapper(
+                                                                    (F('material__price') * F('item'))+(F('material__price') * F('item'))*F('material__tax__value')/100, output_field=FloatField()
+															   ))
+        invoice_detail_object = chain(invoicem_material, invoicem_service)
         invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(
             total_tax=Sum(
                 Coalesce (
@@ -184,7 +193,7 @@ class CreateInvoiceView(CreateView):
         """
         id = invoice_form.save()
         self.object = id
-        
+
         invoice_material_form.instance = self.object
         materials = invoice_material_form.save(commit=False)
         for material in materials:
