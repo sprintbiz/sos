@@ -30,12 +30,12 @@ class InvoiceServiceForm(forms.ModelForm):
         fields = ['service','hour',]
 
 class InvoiceMaterialForm(forms.ModelForm):
-    item = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
+    quantity = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
     material = forms.ModelChoiceField(queryset = Material.objects.all(), widget=forms.Select(attrs={'class':'select2'}), required =False)
     warehouse =  forms.ModelChoiceField(queryset=Warehouse.objects.all(), widget= forms.Select(attrs={'class': 'select2' }), required=False)
     class Meta():
         model = Material
-        fields = ['material','item', 'warehouse',]
+        fields = ['material','quantity', 'warehouse',]
 
 class EventForm(forms.ModelForm):
     project = forms.ModelChoiceField(required =False, label='Project', queryset = Project.objects.all(), widget=forms.Select(attrs={'style':'width: 100%','class':'project-select', 'id':'project-select'}))

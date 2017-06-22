@@ -67,11 +67,11 @@ class InvoicePrintView(View):
 															   )
         invoicem_material = Invoice_Material.objects.filter(invoice_id=id).annotate(service_name=F('material__name')
 		                                                       ,price_per_hour=ExpressionWrapper( F('material__price'), output_field=FloatField() )
-															   ,value=ExpressionWrapper(F('material__price') * F('item'), output_field=FloatField())
-															   ,tax_value=ExpressionWrapper( (F('material__price') * F('item'))*F('material__tax__value')/100, output_field=FloatField() )
+															   ,value=ExpressionWrapper(F('material__price') * F('quantity'), output_field=FloatField())
+															   ,tax_value=ExpressionWrapper( (F('material__price') * F('quantity'))*F('material__tax__value')/100, output_field=FloatField() )
                                                                ,tax_prct=F('material__tax__value')
 															   ,gross_value=ExpressionWrapper(
-                                                                    (F('material__price') * F('item'))+(F('material__price') * F('item'))*F('material__tax__value')/100, output_field=FloatField()
+                                                                    (F('material__price') * F('quantity'))+(F('material__price') * F('quantity'))*F('material__tax__value')/100, output_field=FloatField()
 															   ))
         invoice_detail_object = chain(invoicem_material, invoicem_service)
         invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(
