@@ -77,7 +77,7 @@
                             <tr>
                                 <td>{{ invoice_detail_field.service_name}}</td>
                                 <td class="text-center">{{ invoice_detail_field.price_per_hour|floatformat:2}}</td>
-                                <td class="text-center">{{ invoice_detail_field.hour}}</td>
+                                <td class="text-center">{{ invoice_detail_field.quantity}} </td>
                                 <td class="text-center">{{ invoice_detail_field.value|floatformat:2}}</td>
                                 <td class="text-center">{{ invoice_detail_field.tax_prct}}</td>
                                 <td class="text-right">{{ invoice_detail_field.tax_value|floatformat:2}}</td>
@@ -87,15 +87,15 @@
                             <tr>
 
                                 <td colspan="1" class="no-line text-right"><strong>Suma Vat</strong></td>
-                                <td colspan="6" class="no-line text-left">{{invoice_total.total_tax|floatformat:2}}</td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total_tax|floatformat:2}}</td>
                             </tr>
                             <tr>
                                 <td colspan="1" class="no-line text-right"><strong>Suma Netto</strong></td>
-                                <td colspan="6" class="no-line text-left">{{invoice_total.total_net|floatformat:2}}</td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total_net|floatformat:2}}</td>
                             </tr>
                             <tr>
                                 <td colspan="1" class="no-line text-right"><strong>Do Zapłaty</strong></td>
-                                <td colspan="6" class="no-line text-left">{{invoice_total.total_gross|floatformat:2}}</td>
+                                <td colspan="6" class="no-line text-left">{{invoice_total_gross|floatformat:2}}</td>
                             </tr>
                             <tr>
                                 <td colspan="1" class="no-line text-right"><strong>Słownie</strong></td>
