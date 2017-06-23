@@ -221,7 +221,7 @@ class Invoice_Service (models.Model):
     id = models.AutoField(primary_key=True)
     invoice = models.ForeignKey(Invoice)
     service = models.ForeignKey(Service)
-    hour  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    quantity  = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

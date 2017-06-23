@@ -22,12 +22,12 @@ class InvoiceForm(forms.ModelForm):
         fields = ['id','name', 'type', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
 
 class InvoiceServiceForm(forms.ModelForm):
-    hour = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
+    quantity = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
     service = forms.ModelChoiceField(required =False, queryset = Service.objects.all(), widget=forms.Select(attrs={'class':'select2'}))
 
     class Meta():
         model = Service
-        fields = ['service','hour',]
+        fields = ['service','quantity',]
 
 class InvoiceMaterialForm(forms.ModelForm):
     quantity = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))

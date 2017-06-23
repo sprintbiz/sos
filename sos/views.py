@@ -55,13 +55,13 @@ class InvoicePrintView(View):
         invoice_object = Invoice.objects.get(id=id)
         invoicem_service = Invoice_Service.objects.filter(invoice_id=id).annotate(service_name=F('service__name')
 		                                                       ,price_per_hour=ExpressionWrapper( Coalesce(F('service__price_per_hour'), F('service__fixed_price') ), output_field=FloatField() )
-															   ,value=ExpressionWrapper(Coalesce(F('service__price_per_hour') * F('hour'), F('service__fixed_price') * F('hour')), output_field=FloatField())
-															   ,tax_value=ExpressionWrapper( Coalesce((F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100, (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100), output_field=FloatField() )
+															   ,value=ExpressionWrapper(Coalesce(F('service__price_per_hour') * F('quantity'), F('service__fixed_price') * F('quantity')), output_field=FloatField())
+															   ,tax_value=ExpressionWrapper( Coalesce((F('service__price_per_hour') * F('quantity'))*F('service__tax__value')/100, (F('service__fixed_price') * F('quantity'))*F('service__tax__value')/100), output_field=FloatField() )
                                                                ,tax_prct=F('service__tax__value')
 															   ,gross_value=ExpressionWrapper(
                                                                    Coalesce (
-                                                                       (F('service__price_per_hour') * F('hour'))+(F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100,
-                                                                       (F('service__fixed_price') * F('hour'))+(F('service__fixed_price') * F('hour'))*F('service__tax__value')/100
+                                                                       (F('service__price_per_hour') * F('quantity'))+(F('service__price_per_hour') * F('quantity'))*F('service__tax__value')/100,
+                                                                       (F('service__fixed_price') * F('quantity'))+(F('service__fixed_price') * F('quantity'))*F('service__tax__value')/100
                                                                    ), output_field=FloatField()
                                                                )
 															   )
@@ -74,27 +74,47 @@ class InvoicePrintView(View):
                                                                     (F('material__price') * F('quantity'))+(F('material__price') * F('quantity'))*F('material__tax__value')/100, output_field=FloatField()
 															   ))
         invoice_detail_object = chain(invoicem_material, invoicem_service)
-        invoice_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(
+        invoice_service_total = Invoice_Service.objects.filter(invoice_id=id).aggregate(
             total_tax=Sum(
                 Coalesce (
-                    (F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100,
-                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100
+                    (F('service__price_per_hour') * F('quantity'))*F('service__tax__value')/100,
+                    (F('service__fixed_price') * F('quantity'))*F('service__tax__value')/100
                 ), output_field=FloatField()
             ),
             total_net=Sum(
                 Coalesce (
-                    F('service__price_per_hour') * F('hour'),
-                    F('service__fixed_price') * F('hour')
+                    F('service__price_per_hour') * F('quantity'),
+                    F('service__fixed_price') * F('quantity')
                 ), output_field=FloatField()
             ),
             total_gross=Sum(
                 Coalesce (
-                    (F('service__price_per_hour') * F('hour'))*F('service__tax__value')/100+F('service__price_per_hour') * F('hour'),
-                    (F('service__fixed_price') * F('hour'))*F('service__tax__value')/100+F('service__fixed_price') * F('hour'),
+                    (F('service__price_per_hour') * F('quantity'))*F('service__tax__value')/100+F('service__price_per_hour') * F('quantity'),
+                    (F('service__fixed_price') * F('quantity'))*F('service__tax__value')/100+F('service__fixed_price') * F('quantity'),
                 ), output_field=FloatField()
             )
         )
-        return render(request,'invoice_print.html',{'invoice_object' : invoice_object,'invoice_detail_object' : invoice_detail_object, 'invoice_total' : invoice_total} )
+        invoice_material_total = Invoice_Material.objects.filter(invoice_id=id).aggregate(
+            total_tax=Sum(
+                    (F('material__price') * F('quantity'))*F('material__tax__value')/100, output_field=FloatField()
+            ),
+            total_net=Sum(
+                    F('material__price') * F('quantity'), output_field=FloatField()
+            ),
+            total_gross=Sum(
+                    (F('material__price') * F('quantity'))*F('material__tax__value')/100+F('material__price') * F('quantity'), output_field=FloatField()
+            )
+        )
+        invoice_total_tax = invoice_service_total['total_tax'] + invoice_material_total['total_tax']
+        invoice_total_net = invoice_service_total['total_net'] + invoice_material_total['total_net']
+        invoice_total_gross = invoice_service_total['total_gross'] + invoice_material_total['total_gross']
+        return render(request,'invoice_print.html'  ,{'invoice_object' : invoice_object
+                                                    , 'invoice_detail_object' : invoice_detail_object
+                                                    , 'invoice_total_tax' : invoice_total_tax
+                                                    , 'invoice_total_net' : invoice_total_net
+                                                    , 'invoice_total_gross' : invoice_total_gross
+                                                    }
+                    )
 
 class InvoiceEditView(UpdateView):
     action_url =''
