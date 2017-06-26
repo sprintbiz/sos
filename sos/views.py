@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
 from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
 from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
+from sos.val2text import val2text
 from django.contrib.auth.models import User
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
@@ -105,14 +107,41 @@ class InvoicePrintView(View):
                     (F('material__price') * F('quantity'))*F('material__tax__value')/100+F('material__price') * F('quantity'), output_field=FloatField()
             )
         )
+        if invoice_service_total['total_tax'] is None:
+            invoice_service_total['total_tax'] = 0
+        if invoice_material_total['total_tax'] is None:
+            invoice_material_total['total_tax'] = 0
+
+        if invoice_service_total['total_net'] is None:
+            invoice_service_total['total_net'] = 0
+        if invoice_material_total['total_net'] is None:
+            invoice_material_total['total_net'] = 0
+
+        if invoice_service_total['total_gross'] is None:
+            invoice_service_total['total_gross'] = 0
+        if invoice_material_total['total_gross'] is None:
+            invoice_material_total['total_gross'] = 0
+
         invoice_total_tax = invoice_service_total['total_tax'] + invoice_material_total['total_tax']
         invoice_total_net = invoice_service_total['total_net'] + invoice_material_total['total_net']
         invoice_total_gross = invoice_service_total['total_gross'] + invoice_material_total['total_gross']
+        if int(invoice_total_gross) > 0:
+            invoice_text_value_zl = val2text().translate(int(invoice_total_gross)) + ' złotych'
+        else:
+            invoice_text_value_zl = ''
+        if int(invoice_total_gross - int(invoice_total_gross)) > 0:
+            invoice_text_value_gr = val2text().translate(int(invoice_total_gross - int(invoice_total_gross))) + ' groszy'
+        else:
+            invoice_text_value_gr = ''
+
+        invoice_text_value = invoice_text_value_zl + invoice_text_value_gr
+
         return render(request,'invoice_print.html'  ,{'invoice_object' : invoice_object
                                                     , 'invoice_detail_object' : invoice_detail_object
                                                     , 'invoice_total_tax' : invoice_total_tax
                                                     , 'invoice_total_net' : invoice_total_net
                                                     , 'invoice_total_gross' : invoice_total_gross
+                                                    , 'invoice_text_value' : invoice_text_value
                                                     }
                     )
 
