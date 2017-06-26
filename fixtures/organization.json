@@ -1,0 +1,722 @@
+[
+   {
+      "model":"sos.organization",
+      "pk":1,
+      "fields":{
+         "name":"Przedsiembiorstwo Handlowo-Usługowe \"OIO\" Osytek Irena",
+         "street_name":"Langiewicza 9a",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"59 1050 1025 1000 0022 0322 4338",
+         "org_type_id":"8",
+         "org_nbr_1":"125-004-96-11",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":2,
+      "fields":{
+         "name":"INERGO Mihał Busz,Paweł Szafraniec Spółka Jawna",
+         "street_name":"ŚW.Franciszka Selazego 4m1",
+         "zip_code":"00-392",
+         "city":"Warszawa",
+         "bank_account":"96 10901014 0000 0001 3098 2058",
+         "org_type_id":"8",
+         "org_nbr_1":"525-262-35-13",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":3,
+      "fields":{
+         "name":"Spółdzielnia Budowlano-Mieszkaniowa \"MM\"",
+         "street_name":"ul.Gen. Maczka 1 lok. 29A",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-132-91-52",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":4,
+      "fields":{
+         "name":"Envir Technology Adam Zakrzewski",
+         "street_name":"ul. St.Wyspiańskiego 28",
+         "zip_code":"09-400",
+         "city":"Płock",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"774-236-87-27",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":5,
+      "fields":{
+         "name":"PROFI-SERWIS MARIUSZ KEMPSKI",
+         "street_name":"ul. Józefa Piłsudskiego 166 C",
+         "zip_code":"41-707",
+         "city":"Ruda Śląska",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"954-224-61-27",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":6,
+      "fields":{
+         "name":"Komputronik S.A.",
+         "street_name":"uL.Wołczyńska 37",
+         "zip_code":"60-003",
+         "city":"Poznań",
+         "bank_account":"",
+         "org_type_id":"8",
+         "org_nbr_1":"927-09-02-729",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":7,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Nieruchomości położonej pzy ul. Malczewskiego 13 w Ząbkach",
+         "street_name":"Malczewskiego 13",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-12-47-891",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":9,
+      "fields":{
+         "name":"ISS RS Sp. z o.o.",
+         "street_name":"ul. Flisa 2",
+         "zip_code":"02-247",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"634-277-11-69",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":10,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Powstańców 15",
+         "street_name":"ul. Powstańców 15",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-11-24-119",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":11,
+      "fields":{
+         "name":"WSPÓLNOTA MIESZKANIOWA PRZY UL CH ANDERSENA 44, 44A I UL POWSTAŃCÓW 45, 45A, 45B",
+         "street_name":"UL CH ANDERSENA 44, 44A I UL POWSTAŃCÓW 45, ",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"5222996729",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":12,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Budynków 22A i 22B przy ul. Bandurskiego w Markach",
+         "street_name":"ul. Bandurskiego 22A i 22B",
+         "zip_code":"05-270",
+         "city":"Marki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-160-39-72",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":14,
+      "fields":{
+         "name":"Stowarzyszenie Błękitne Centrum",
+         "street_name":"ul. Piłsudskiego 31",
+         "zip_code":"05-120",
+         "city":"Legionowo",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"536-17-63-710",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":15,
+      "fields":{
+         "name":"THERMOSTAHL POLAND Sp. z o.o",
+         "street_name":"Al. Wojska Polskiego 42B",
+         "zip_code":"05-800",
+         "city":"Pruszków",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"522-26-20-875",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":16,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Nieruchomości przy placu Czarnieckiego 45 w Sulejówku",
+         "street_name":"Plac Czarnieckiego 45",
+         "zip_code":"05-070",
+         "city":"Sulejówek",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"822-20-01-895",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":17,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Nieruchomości Drewnicka 2 w Ząbkach",
+         "street_name":"ul. Drewnicka 2",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-09-83-955",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":18,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Nieruchomości Drewnicka 6 w Zabkach",
+         "street_name":"ul. Drewnicka 6",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-12-41-428",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":19,
+      "fields":{
+         "name":"Wspólnota mieszkaniowa Drewnicka 4",
+         "street_name":"Ul. Drewnicka 4",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-12-41-440",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":20,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Górczewska 253F w Warszawie",
+         "street_name":"ul. Górczewska 253F",
+         "zip_code":"01-459",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"7010282914",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":21,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Jagiellońska 6",
+         "street_name":"ul. Jagiellońska 6",
+         "zip_code":"05-220",
+         "city":"Zielonka",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-162-26-85",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":22,
+      "fields":{
+         "name":"\"Stowarzyszenie Mieszkańców Osiedla Akacjowa Dolina w Kątach Węgierskich\"",
+         "street_name":"ul. Olchowa 3a , Kąty Węgierskie",
+         "zip_code":"05-126",
+         "city":"Nieporęt",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"536-186-56-23",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":23,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa \"Gajowa\"",
+         "street_name":"ul. Krucza 21",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-155-45-93",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":24,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Legionów 10 A",
+         "street_name":"ul. Legionów 10 A",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-136-88-67",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":26,
+      "fields":{
+         "name":"WSPÓLNOTA MIESZKANIOWA LEGIONÓW 10B",
+         "street_name":"UL. LEGIONÓW 10 B",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-13-36-985",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":27,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Padarewskiego 1",
+         "street_name":"ul. Padarewskiego 1",
+         "zip_code":"05-220",
+         "city":"Zielonka",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-162-06-28",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":29,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Powstańców 15D",
+         "street_name":"ul. Powstańców 15D",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-11-24-125",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":30,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Reymonta 29",
+         "street_name":"ul.Reymonta 29",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-13-33-751",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":31,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Reymonta 29A",
+         "street_name":"ul.Reymonta 29A",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-13-33-768",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":33,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Reymonta 29B",
+         "street_name":"ul. Reymonta 29B",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-133-37-74",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":36,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Reymonta 29C",
+         "street_name":"ul. Reymonta 29C",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-133-37-80",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":37,
+      "fields":{
+         "name":"WSPÓLNOTA MIESZKANIOWA RÓŻANA 7 W ZĄBKACH",
+         "street_name":"ul.. Różana 7",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"1251630360",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":38,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa, Pl. Stefana Czarnieckiego 81",
+         "street_name":"Pl. Stefana Czarnieckiego 81",
+         "zip_code":"05-070",
+         "city":"Sulejówek",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"822-20-01-814",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":40,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa ul. Trembowelska 19",
+         "street_name":"ul. Trembowelska 19",
+         "zip_code":"04-304",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"113-22-78-833",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":41,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Osiedle Laguna",
+         "street_name":"ul. Warszawska 55",
+         "zip_code":"05-075",
+         "city":"Warszawa-Wesoła",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"952-200-88-67",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":42,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa \" Wiosenna 2 \"",
+         "street_name":"ul. Wiosenna 2",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-156-64-90",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":43,
+      "fields":{
+         "name":"Spółdzielnia Mieszkaniowa \"Wspólny Trud\" w Ząbkach",
+         "street_name":"ul. Wojska Polskiego 3 lok 1",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-154-38-62",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":44,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Zielone Przedmieście A,B",
+         "street_name":"ul. 11 Listopada 5A",
+         "zip_code":"05- 270",
+         "city":"Marki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-144-08-20",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":45,
+      "fields":{
+         "name":"Spie Polska Sp. z o.o",
+         "street_name":"ul. Powsińska 64a",
+         "zip_code":"02-903",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"526-22-54-649",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":46,
+      "fields":{
+         "name":"Sofra Renata Chądzyńska Ziemak",
+         "street_name":"ul.Piłsudskiego 1",
+         "zip_code":"05-270",
+         "city":"Marki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"772-104-02-00",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":47,
+      "fields":{
+         "name":"Samodzielny Publiczny Zakład Opieki Zdrowotnej Warszawa-Białołęka",
+         "street_name":"ul. Milenijna 4",
+         "zip_code":"03-125",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"524-23-48-873",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":48,
+      "fields":{
+         "name":"Wspólnota Mieszkańców Osiedla Topoli",
+         "street_name":"Zieleniecka 11,13,15",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-09-97-147",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":54,
+      "fields":{
+         "name":"WSPÓLNOTA MIESZKANIOWA RÓŻANA 9 W ZĄBKACH",
+         "street_name":"ul.RÓŻANA 9",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"1251631520",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":56,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Wiejska 3A w Markach",
+         "street_name":"ul.Wiejska 3A",
+         "zip_code":"05- 270",
+         "city":"Marki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-163-65-23",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":58,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa ulica Chełmrzyńska 50",
+         "street_name":"ul.Chełmrzyńska 50",
+         "zip_code":"04-247",
+         "city":"Warszawa- Rembertów",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"952-198-08-27",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":59,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Powstańców 26F",
+         "street_name":"ul. Powstańców 26F",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"125-149-54-94",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":60,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Słowackiego 5",
+         "street_name":"ul. Juliusza Słowackiego 5",
+         "zip_code":"05- 091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"1251513909",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":61,
+      "fields":{
+         "name":"Wspólnota Mieszkaniowa Kartograficzna 80A,B ,Geodezyjna 73C",
+         "street_name":"UL.Kartograficzna 80B",
+         "zip_code":"03-290",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"524-268-63-05",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":62,
+      "fields":{
+         "name":"Jarosław Wojtaś",
+         "street_name":"ul.Andersena 44a",
+         "zip_code":"05-091",
+         "city":"Ząbki",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.organization",
+      "pk":64,
+      "fields":{
+         "name":"ISS Facility Services Sp. z o.o.",
+         "street_name":"Flisa 2",
+         "zip_code":"02-247",
+         "city":"Warszawa",
+         "bank_account":"",
+         "org_type_id":"3",
+         "org_nbr_1":"676-17-71-576",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   }
+]

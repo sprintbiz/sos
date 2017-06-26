@@ -1,0 +1,92 @@
+[
+   {
+      "model":"sos.tax",
+      "pk":1,
+      "fields":{
+         "name":"VAT 23",
+         "value":"23",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":2,
+      "fields":{
+         "name":"VAT 8",
+         "value":"8",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":3,
+      "fields":{
+         "name":"VAT 6",
+         "value":"6",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":4,
+      "fields":{
+         "name":"VAT 5",
+         "value":"5",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":5,
+      "fields":{
+         "name":"VAT 0",
+         "value":"0",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":6,
+      "fields":{
+         "name":"zw.",
+         "value":"0",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":7,
+      "fields":{
+         "name":"np.",
+         "value":"0",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":11,
+      "fields":{
+         "name":"oo.",
+         "value":"0",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   },
+   {
+      "model":"sos.tax",
+      "pk":12,
+      "fields":{
+         "name":"VAT 7",
+         "value":"7",
+         "created":"2017-04-20T00:00:00+00:00",
+         "updated":"2017-04-20T00:00:00+00:00"
+      }
+   }
+]
