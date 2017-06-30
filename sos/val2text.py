@@ -77,7 +77,7 @@ class val2text:
         if n[0] == 1:
             num1 = self.i[n[0]*1000]
         if n[0] > 1:
-            num1 = self.i[n[0]] + t['t3a']
+            num1 = self.i[n[0]] + self.t['t3a']
         num2 = self.len3(n[1])
         return num1 + ' ' + num2
 
@@ -86,7 +86,7 @@ class val2text:
         if n[0] == 1:
             num1 = self.i[n[0]*1000]
         if n[0] > 1:
-            num1 = self.len2(n[0]) + t['t3b']
+            num1 = self.len2(n[0]) + self.t['t3b']
         num2 = self.len3(n[1])
         return num1 + ' ' + num2
 
