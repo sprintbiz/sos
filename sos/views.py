@@ -2,10 +2,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm
+from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm, GroupForm, PermissionForm
 from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from sos.val2text import val2text
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.forms import extras, inlineformset_factory
 from django.forms import modelformset_factory
 import cStringIO as StringIO
@@ -28,6 +28,7 @@ import datetime
 from django.utils import timezone
 from django.db import connection
 from itertools import chain
+import math
 
 class RedirectView(View):
     def get(self, request):
@@ -129,12 +130,12 @@ class InvoicePrintView(View):
             invoice_text_value_zl = val2text().translate(int(invoice_total_gross)) + ' złotych'
         else:
             invoice_text_value_zl = ''
-        if int(invoice_total_gross - int(invoice_total_gross)) > 0:
-            invoice_text_value_gr = val2text().translate(int(invoice_total_gross - int(invoice_total_gross))) + ' groszy'
+        if (invoice_total_gross-int(invoice_total_gross)) > 0:
+            invoice_text_value_gr = ' i ' + val2text().translate(int(round(100*(invoice_total_gross % 1)))) + ' groszy'
         else:
             invoice_text_value_gr = ''
 
-        invoice_text_value = invoice_text_value_zl + invoice_text_value_gr
+        invoice_text_value =  invoice_text_value_zl + ' ' + invoice_text_value_gr
 
         return render(request,'invoice_print.html'  ,{'invoice_object' : invoice_object
                                                     , 'invoice_detail_object' : invoice_detail_object
@@ -699,6 +700,13 @@ class ProfileCreateView(View):
             messages.success(request, 'Profile for ' + request.POST.get("username", "") + ' created')
         return render(request,template,{'title' : title, 'profile_form' : profile_create_form})
 
+class ProfileList(View):
+    def get(self, request):
+        title ='User List'
+        template = 'profile_list.html'
+        users = User.objects.all()
+        return render(request,template,{'title' : title, 'users' : users})
+
 class ProfileView(View):
     def get(self, request):
         title ='Profile'
@@ -739,3 +747,35 @@ class ProfileChangePassword(View):
             return redirect('profile')
         else:
             return render(request, 'profile_password_change.html', {'password_form': password_form})
+
+class ProfileDelete(DeleteView):
+    title = 'Profile Delete'
+    template_name = 'profile_confirm_delete.html'
+    model = User
+    success_url = reverse_lazy('profile-list')
+    success_message = "Profile was deleted successfully"
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(ProfileDelete, self).delete(request, *args, **kwargs)
+
+class GroupCreateView(View):
+    def get(self, request):
+        title ='Create Group'
+        template = 'group_create.html'
+        group_form = GroupForm()
+        return render(request,template,{'title' : title, 'group_create_form' : group_form})
+
+    def post(self, request):
+        title ='Create Group'
+        template = 'group_create.html'
+        group_create_form = CreateGroupForm(request.POST)
+        if group_create_form.is_valid():
+            group_create_form.save()
+            messages.success(request, 'Group for ' + request.POST.get("username", "") + ' created')
+        return render(request,template,{'title' : title, 'group_form' : group_create_form})
+
+class PermissionList(ListView):
+    title = 'Permission List'
+    template_name = 'permission_list.html'
+    model = Permission
+    form_class = PermissionForm
