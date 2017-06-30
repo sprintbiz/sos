@@ -132,6 +132,7 @@
 								{% if user.is_authenticated %}
 								{% if request.user.is_superuser %}
 								<li><a href="{% url 'profile-create' %}">Add User</a></li>
+								<li><a href="{% url 'profile-list' %}">User List</a></li>
 								{% endif %}
 								<li><a href="{% url 'profile' %}">Profile</a></li>
 								<li><a href="#"><span class="badge badge-danger pull-right">5</span>My Inbox</a></li>

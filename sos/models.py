@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from datetime import datetime
 
 class Code(models.Model):
@@ -283,3 +283,4 @@ class Material_Transactions(models.Model):
 
     def get_absolute_url(self):
         return reverse('material-transaction-edit', kwargs={'pk': self.id})
+        
