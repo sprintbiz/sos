@@ -1,6 +1,6 @@
 from django import forms
 from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax, Unit
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
 from django.utils.translation import ugettext_lazy
@@ -165,6 +165,7 @@ class UserForm(forms.ModelForm):
     email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    group = forms.ModelChoiceField(queryset = Group.objects.all() , label='Group', widget= forms.Select(attrs={'class': 'form-control','id':'user-group', }))
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
@@ -191,6 +192,21 @@ class PasswordChangeCustomForm(PasswordChangeForm):
         self.fields['old_password'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
+
+class GroupForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    class Meta:
+        model = Group
+        fields = ['name']
+
+class PermissionForm(forms.ModelForm):
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'permision-name', }))
+    content_type = forms.CharField(required =True, label='Content Type', widget= forms.TextInput(attrs={'class': 'form-control','id':'permision-content_type', }))
+    codename = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'permision-name', }))
+
+    class Meta:
+        model = Permission
+        fields = ['name','content_type','codename']
 
 invoice_service_formset = inlineformset_factory(Invoice, Invoice_Service, form=InvoiceServiceForm, extra=1, can_delete=True)
 invoice_material_formset = inlineformset_factory(Invoice, Invoice_Material, form=InvoiceMaterialForm, extra=1, can_delete=True)
