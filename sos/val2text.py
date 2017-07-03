@@ -87,7 +87,12 @@ class val2text:
             num1 = self.i[n[0]*1000]
         if n[0] > 1:
             num1 = self.len2(n[0]) + self.t['t3b']
-        num2 = self.len3(n[1])
+        if len(str(inNumber - n[0] * 1000)) == 3:
+            num2 = self.len3(n[1])
+        if len(str(inNumber - n[0] * 1000)) == 2:
+            num2 = self.len2(n[1])
+        if len(str(inNumber - n[0] * 1000)) == 1:
+            num2 = self.len1(n[1])
         return num1 + ' ' + num2
 
     def translate(self, inNumber):
