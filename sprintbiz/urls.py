@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from sos.views import ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, ManufacturerList, ManufacturerCreate, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, MaterialTransactionDelete, MaterialTransactionEdit, MaterialTransactionList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView, ProfileList, ProfileDelete, GroupCreateView
+from sos.views import AddressCreate, AddressList, ProjectCreate, ProjectDelete, ProjectDetail, ProjectEdit, ProjectList, ServiceCreate, ServiceDelete, ServiceDetail, ServiceEdit, ServiceList, ManufacturerList, ManufacturerCreate, MaterialList, MaterialCreate, MaterialDelete, MaterialEdit, MaterialDetail, MaterialGroupCreate, MaterialGroupDelete, MaterialGroupDetail, MaterialGroupEdit, MaterialGroupList, MaterialTransactionDelete, MaterialTransactionEdit, MaterialTransactionList, OrganizationDetail, OrganizationEdit, OrganizationDelete, OrganizationCreate, OrganizationList, TaxDetail, TaxDelete, TaxList, TaxCreate, TaxEdit, JsonDaysNotFilled, EventEdit, EventCreate, EventList, JsonProject, CalendarResponce, RedirectView, Dashboard, InvoiceListView, InvoicePrintView, CreateInvoiceView, InvoiceEditView, TimescheetView, ProfileView, ProfileChangePassword, ProfileCreateView, ProfileList, ProfileDelete, GroupCreateView
 admin.autodiscover()
 from sos.forms import LoginForm
 from django.contrib.auth import views as auth_views
@@ -62,6 +62,8 @@ urlpatterns = [
     url(r'^material_transaction/$', MaterialTransactionList.as_view(), name='material-transaction-list'),
     url(r'^material_transaction/delete/(?P<pk>\w+)/$', MaterialTransactionDelete.as_view(), name='material-transaction-delete'),
     url(r'^material_transaction/edit/(?P<pk>\w+)/$', MaterialTransactionEdit.as_view(), name='material-transaction-edit'),
+    url(r'^address/$', AddressList.as_view(), name='address-list'),
+    url(r'^address/create/$', AddressCreate.as_view(), name='address-create'),
     url(r'^organization/$', OrganizationList.as_view(), name='organization-list'),
     url(r'^organization/create/$', OrganizationCreate.as_view(), name='organization-create'),
     url(r'^organization/edit/(?P<pk>\w+)/$', OrganizationEdit.as_view(), name='organization-edit'),

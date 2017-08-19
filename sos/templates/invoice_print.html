@@ -19,6 +19,13 @@
                         {% if invoice_object.company.org_nbr_1 != ""%}
                         NIP {{ invoice_object.company.org_nbr_1}}
                         {% endif %}
+                        <br>
+                        {% if invoice_object.additional_address_ind == "1"%}
+                        <strong>Adres zameldowania:</strong><br>
+                        {{ invoice_object.company.address.name}}<br>
+                        {{ invoice_object.company.address.street_name}} {{ invoice_object.company.address.street_number}}<br>
+                        {{ invoice_object.company.address.zip_code}} {{ invoice_object.company.address.city}}
+                        {% endif %}
                     </address>
                 </div>
                 <div class="col-xs-6 text-right">
@@ -28,7 +35,7 @@
                         {{ invoice_object.customer.street_name}} {{ invoice_object.customer.street_number}},
                         {{ invoice_object.customer.zip_code}} {{ invoice_object.customer.city}} <br>
                         {% if invoice_object.customer.org_nbr_1 != "" %}
-                        NIP {{ invoice_object.customer.org_nbr_1}}
+                        {{ invoice_object.customer.org_nbr_1}}
                         {% endif %}
                     </address>
                 </div>
@@ -47,8 +54,10 @@
                 </div>
                 <div class="col-xs-6 text-right">
                     <address>
-                        <strong>Data sprzedaży:</strong><br>
+                        <strong>Data wystawienia:</strong><br>
                         {{ invoice_object.create_date|date:"SHORT_DATE_FORMAT" }}<br><br>
+                        <strong>Data sprzedaży:</strong><br>
+                        {{ invoice_object.sales_date|date:"SHORT_DATE_FORMAT" }}<br><br>
                     </address>
                 </div>
             </div>

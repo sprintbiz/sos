@@ -43,9 +43,41 @@ class Tax (models.Model):
     def get_absolute_url(self):
         return reverse('tax-edit', kwargs={'pk': self.id})
 
+
+class Address (models.Model):
+
+    id = models.AutoField(primary_key=True)
+    address_type = models.CharField(max_length=10, blank=True)
+    name = models.CharField(max_length=200)
+    street_name = models.CharField(max_length=200, blank=True)
+    street_number = models.CharField(max_length=10, blank=True)
+    zip_code = models.CharField(max_length=60, blank=True)
+    city = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    email = models.CharField(max_length=200, blank=True)
+    bank_account = models.CharField(max_length=40, blank=True)
+    add_code1 = models.CharField(max_length=100, blank=True)
+    add_code2 = models.CharField(max_length=100, blank=True)
+    add_code3 = models.CharField(max_length=100, blank=True)
+    add_code4 = models.CharField(max_length=100, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('address-edit', kwargs={'pk': self.id})
+
 class Organization (models.Model):
 
     id = models.AutoField(primary_key=True)
+    address = models.ForeignKey(Address)
     name = models.CharField(max_length=200)
     street_name = models.CharField(max_length=200, blank=True)
     street_number = models.CharField(max_length=10, blank=True)
@@ -74,6 +106,7 @@ class Organization (models.Model):
 
     def get_absolute_url(self):
         return reverse('organization-edit', kwargs={'pk': self.id})
+
 
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
@@ -123,8 +156,10 @@ class Invoice (models.Model):
     type = models.ForeignKey(Code, related_name='invoice_type')
     name = models.CharField(max_length=10)
     create_date = models.DateField()
+    sales_date = models.DateField(blank=True, null=True)
     payment_date = models.DateField()
     status = models.ForeignKey(Code, related_name='invoice_status')
+    additional_address_ind = models.CharField(max_length=1)
     company = models.ForeignKey(Organization, related_name='organization_company')
     customer = models.ForeignKey(Organization, related_name='organization_customer')
     payment_method = models.ForeignKey(Code, related_name='invoice_payment_method')
@@ -142,6 +177,11 @@ class Invoice (models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.sales_date:
+            self.sales_date = self.create_date
+        super(Invoice, self).save(*args, **kwargs)
 
 class Material_Group (models.Model):
     id = models.AutoField(primary_key=True)
@@ -283,4 +323,3 @@ class Material_Transactions(models.Model):
 
     def get_absolute_url(self):
         return reverse('material-transaction-edit', kwargs={'pk': self.id})
-        

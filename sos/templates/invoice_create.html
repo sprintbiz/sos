@@ -54,6 +54,13 @@
   							{{ invoice_form.status }}
   						</div>
   					</div>
+            <div class="form-group">
+              {{ invoice_form.additional_address_ind.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.additional_address_ind.label }}</label>
+  						<div class="col-md-9">
+  							{{ invoice_form.additional_address_ind }}
+  						</div>
+  					</div>
   					<div class="form-group">
               {{ invoice_form.company.errors }}
   						<label class="col-md-3 control-label">{{ invoice_form.company.label }}</label>

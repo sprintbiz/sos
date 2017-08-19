@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from django import forms
-from sos.models import Code, Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax, Unit
+from sos.models import Address, Code, Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Warehouse, Tax, Unit
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from djangoformsetjs.utils import formset_media_js
@@ -8,18 +10,22 @@ from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import AuthenticationForm
 
 class InvoiceForm(forms.ModelForm):
+    BOOLEAN_OPTION = ((0, 'N'),(1, 'Y'),)
+
     name = forms.CharField(widget= forms.TextInput(attrs={'class': 'form-control',}))
     type =  forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='TYPE'), widget= forms.Select(attrs={'class': 'select2' }))
     create_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
+    sales_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
     status = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='STATUS'), widget= forms.Select(attrs={'class': 'select2' }))
+    additional_address_ind = forms.ChoiceField(label='Additional Address', choices=BOOLEAN_OPTION, widget= forms.Select(attrs={'class': 'form-control','id':'additional-address', }))
     company = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Company'), widget=forms.Select(attrs={'class':'select2'}))
     customer = forms.ModelChoiceField(queryset = Organization.objects.all().filter(org_type__name='Customer'), widget=forms.Select(attrs={'class':'select2'}))
     literal_value = forms.CharField(widget= forms.Textarea(attrs={'class': 'form-control',}))
     payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
         model = Invoice
-        fields = ['id','name', 'type', 'create_date', 'payment_date','status','company','customer', 'literal_value','payment_method']
+        fields = ['id','name', 'type', 'create_date', 'payment_date','status','additional_address_ind','company','customer', 'literal_value','payment_method']
 
 class InvoiceServiceForm(forms.ModelForm):
     quantity = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))
@@ -125,6 +131,28 @@ class OrganizationForm(forms.ModelForm):
     class Meta:
         model = Organization
         fields = ['name','street_name','street_number','zip_code','city','country','phone','email','org_nbr_1','org_nbr_2','org_type','is_owner','is_customer','is_dealer','is_manufacturer']
+
+class AddressForm(forms.ModelForm):
+
+    ADDRESS_TYPE_OPTIONS = ((1, 'Główny'),(2, 'Dodatkowy'),)
+
+    name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-name', }))
+    address_type = forms.ChoiceField(label='Address Type', choices=ADDRESS_TYPE_OPTIONS, widget= forms.Select(attrs={'class': 'form-control','id':'organization-address-type', }))
+    street_name = forms.CharField(required =False, label='Street Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-name', }))
+    street_number = forms.CharField(required =False, label='Street Number', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-street-number', }))
+    zip_code = forms.CharField(required =False, label='Zip Code', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-zip-code', }))
+    city = forms.CharField(required =False, label='City', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-city', }))
+    country = forms.CharField(required =False, label='Country', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-country', }))
+    phone = forms.CharField(required =False, label='Phone', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-phone', }))
+    email = forms.CharField(required =False, label='Email', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-email', }))
+    add_code1 = forms.CharField(required =False, label='PESEL', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-additional-code1', }))
+    add_code2 = forms.CharField(required =False, label='NIP', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-additional-code2', }))
+    add_code3 = forms.CharField(required =False, label='REGON', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-additional-code3', }))
+    add_code4 = forms.CharField(required =False, label='KRS', widget= forms.TextInput(attrs={'class': 'form-control','id':'organization-additional-code4', }))
+
+    class Meta:
+        model = Address
+        fields = ['name','address_type','street_name','street_number','zip_code','city','country','phone','email','add_code1','add_code2','add_code3','add_code4']
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(required =True, label='Name', widget= forms.TextInput(attrs={'class': 'form-control','id':'project-name', }))

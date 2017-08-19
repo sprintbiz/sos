@@ -8,8 +8,8 @@ from django.core.wsgi import get_wsgi_application
 
 site.addsitedir('D:\sprintbiz\venv\Lib\site-packages')
 
-sys.path.append('D:\sprintbiz\sprintbiz\sprintbiz')
-sys.path.append('D:\sprintbiz\sprintbiz')
+sys.path.append('C:\Users\sawukpaw\Documents\Acard\sos\sprintbiz')
+sys.path.append('C:\Users\sawukpaw\Documents\Acard\sos')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'sprintbiz.settings'
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sprintbiz.settings")
 

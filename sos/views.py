@@ -2,8 +2,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View, UpdateView
 from django.shortcuts import render, get_object_or_404,redirect
-from sos.forms import CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm, GroupForm, PermissionForm
-from sos.models import Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
+from sos.forms import AddressForm, CreateUserForm, invoice_material_formset,invoice_service_formset, EventForm, ManufacturerForm, MaterialForm, MaterialGroupForm, MaterialTransactionForm, OrganizationForm, PasswordChangeCustomForm, ProjectForm, ServiceForm, InvoiceForm, TaxForm, UserForm, GroupForm, PermissionForm
+from sos.models import Address, Event, Invoice, Invoice_Material, Invoice_Service, Manufacturer, Material, Material_Group, Material_Transactions, Organization, Project, Service, Tax, Warehouse
 from sos.val2text import val2text
 from django.contrib.auth.models import User, Group, Permission
 from django.forms import extras, inlineformset_factory
@@ -565,6 +565,21 @@ class TaxDetail(DetailView):
         context = super(TaxDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+class AddressList(ListView):
+    title = 'Address List'
+    template_name = 'address_list.html'
+    model = Address
+    form_class = AddressForm
+
+class AddressCreate(SuccessMessageMixin, CreateView):
+    title = 'Address Create'
+    template_name = 'address_create.html'
+    model = Address
+    form_class = AddressForm
+    success_message = "%(name)s was created successfully"
+    def get_success_url(self):
+        return reverse('address-list')
 
 class OrganizationList(ListView):
     title = 'Organization List'
