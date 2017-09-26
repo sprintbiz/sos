@@ -25,7 +25,7 @@ class InvoiceForm(forms.ModelForm):
     payment_method = forms.ModelChoiceField(queryset=Code.objects.all().filter(entity='INVOICE', schema='PAYMENT_METHOD'), widget= forms.Select(attrs={'class': 'select2' }))
     class Meta:
         model = Invoice
-        fields = ['id','name', 'type', 'create_date', 'payment_date','status','additional_address_ind','company','customer', 'literal_value','payment_method']
+        fields = ['id','name', 'type', 'create_date', 'payment_date','sales_date','status','additional_address_ind','company','customer', 'literal_value','payment_method']
 
 class InvoiceServiceForm(forms.ModelForm):
     quantity = forms.CharField(required =False, widget= forms.TextInput(attrs={'class': 'form-control',}))

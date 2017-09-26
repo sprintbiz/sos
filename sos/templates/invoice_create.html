@@ -97,7 +97,17 @@
   							</div>
   						</div>
   					</div>
-
+            <div class="form-group">
+              {{ invoice_form.sales_date.errors }}
+  						<label class="col-md-3 control-label">{{ invoice_form.sales_date.label }}</label>
+  						<div class="col-md-9">
+  							<div class="input-group">
+  								<span class="input-group-addon" id="basic-addon1">
+  									<i class="fa fa-calendar" aria-hidden="true"></i></span>
+  								{{ invoice_form.sales_date }}
+  							</div>
+  						</div>
+  					</div>
             {{ invoice_form.literal_value.errors }}
             <label>{{ invoice_form.literal_value.label }}</label>
   			    {{ invoice_form.literal_value }}
